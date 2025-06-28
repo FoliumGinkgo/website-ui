@@ -13,6 +13,8 @@ import {
 import { API_BASE_URL, API_ENDPOINTS, buildApiUrl } from '@/config/api';
 import { getTexts, type TextConfig } from '@/config/texts';
 import { getImageUrl } from '@/utils/imageUtils';
+import Navigation from '@/components/Navigation';
+import { ROUTES } from '@/config/constants';
 
 // 语言接口定义
 interface Language {
@@ -59,10 +61,10 @@ const Header: React.FC = () => {
 
   // 导航菜单项
   const menuItems: MenuItem[] = [
-    { id: 'home', label: texts.home, href: '/' },
-    { id: 'about', label: texts.about, href: '/about-us' },
-    { id: 'products', label: texts.products, href: '/bucket-teeth' },
-    { id: 'contact', label: texts.contact, href: '/contact-us' },
+    { id: 'home', label: texts.home, href: ROUTES.HOME },
+    { id: 'about', label: texts.about, href: ROUTES.ABOUT },
+    { id: 'products', label: texts.products, href: ROUTES.PRODUCTS },
+    { id: 'contact', label: texts.contact, href: ROUTES.CONTACT },
   ];
 
   // 获取语言列表
@@ -87,7 +89,7 @@ const Header: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error('获取语言列表失败:', error);
+      console.error('Failed to fetch languages:', error);
     } finally {
       setLoading(false);
     }
@@ -140,8 +142,8 @@ const Header: React.FC = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      console.log('搜索:', searchQuery);
-      // TODO: 实现搜索逻辑
+      console.log('Search:', searchQuery);
+      // TODO: Implement search logic
     }
   };
 
@@ -207,18 +209,7 @@ const Header: React.FC = () => {
 
             {/* 中间导航区域 */}
             <div className="hidden md:flex items-center space-x-6">
-              <nav className="flex space-x-1">
-                {menuItems.map((item) => (
-                  <Link
-                    key={item.id}
-                    href={item.href}
-                    className="text-gray-700 hover:text-blue-600 px-4 py-2 text-sm font-medium transition-all duration-200 relative group rounded-lg hover:bg-blue-50"
-                  >
-                    {item.label}
-                    <span className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 transition-all duration-200 group-hover:w-6 rounded-full"></span>
-                  </Link>
-                ))}
-              </nav>
+              <Navigation items={menuItems} />
             </div>
 
             {/* 右侧功能区域 */}
@@ -278,7 +269,7 @@ const Header: React.FC = () => {
                         }`}
                       >
                         <Image
-                          src={getImageUrl(currentLanguage.logo)}
+                          src={getImageUrl(language.logo)}
                           alt={language.name}
                           width={20}
                           height={20}
@@ -359,19 +350,7 @@ const Header: React.FC = () => {
           <div className={`md:hidden border-t border-gray-200 bg-white transition-all duration-300 overflow-hidden ${
             isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
           }`} ref={mobileMenuRef}>
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {menuItems.map((item, index) => (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  className="block px-3 py-2.5 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 transform hover:translate-x-1 text-center"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
+            <Navigation items={menuItems} mobile={true} onItemClick={() => setIsMobileMenuOpen(false)} />
           </div>
         </div>
       </header>

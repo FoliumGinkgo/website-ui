@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
@@ -15,9 +15,10 @@ import {
   FaLinkedin, 
   FaInstagram
 } from 'react-icons/fa';
+import { getTexts } from '@/config/texts';
+import Navigation from '@/components/Navigation';
+import { MenuItem, SocialLink, ROUTES, COMPANY_INFO } from '@/config/constants';
 
-
-// 文本接口
 interface FooterTexts {
   companyName: string;
   companyDescription: string;
@@ -25,48 +26,23 @@ interface FooterTexts {
   contactInfo: string;
   followUs: string;
   allRightsReserved: string;
-  home: string;
-  about: string;
-  products: string;
-  contact: string;
   privacyPolicy: string;
   termsOfService: string;
 }
 
-// 社交媒体链接接口
-interface SocialLink {
-  icon: React.ComponentType<{ className?: string }>;
-  href: string;
-  label: string;
-  color: string;
-}
-
 const Footer: React.FC = () => {
-  // 状态管理
-  const [currentLang] = useState<string>('zh'); // 从上下文获取当前语言
-  const [texts, setTexts] = useState<FooterTexts>({
-    companyName: '鑫航公司',
-    companyDescription: '专业的挖掘机配件制造商，致力于为全球客户提供高质量的产品和服务。',
-    quickLinks: '快速链接',
-    contactInfo: '联系信息',
-    followUs: '关注我们',
-    allRightsReserved: '保留所有权利',
-    home: '首页',
-    about: '关于我们',
-    products: '产品中心',
-    contact: '联系我们',
-    privacyPolicy: '隐私政策',
-    termsOfService: '服务条款'
-  });
+  // 使用英文作为默认语言
+  const [currentLang] = useState<string>('en');
+  const texts = getTexts(currentLang);
   
   const currentYear = new Date().getFullYear();
 
   // 快速链接配置
-  const quickLinks = [
-    { label: texts.home, href: '/' },
-    { label: texts.about, href: '/about-us' },
-    { label: texts.products, href: '/bucket-teeth' },
-    { label: texts.contact, href: '/contact-us' },
+  const quickLinks: MenuItem[] = [
+    { id: 'home', label: texts.home, href: ROUTES.HOME },
+    { id: 'about', label: texts.about, href: ROUTES.ABOUT },
+    { id: 'products', label: texts.products, href: ROUTES.PRODUCTS },
+    { id: 'contact', label: texts.contact, href: ROUTES.CONTACT },
   ];
 
   // 社交媒体链接配置
@@ -77,11 +53,8 @@ const Footer: React.FC = () => {
     { icon: FaInstagram, href: '#', label: 'Instagram', color: 'hover:text-pink-600' },
   ];
 
-  // 根据语言获取文本内容
-  useEffect(() => {
-    // TODO: 根据当前语言从API获取对应的文本内容
-    // 这里可以调用语言文本API来获取多语言内容
-  }, [currentLang]);
+  // 获取地址文本
+  const addressText = currentLang === 'zh' ? COMPANY_INFO.ADDRESS.zh : COMPANY_INFO.ADDRESS.en;
 
   return (
     <footer className="bg-gray-900 text-white">
@@ -105,7 +78,9 @@ const Footer: React.FC = () => {
               </span>
             </div>
             <p className="text-gray-300 mb-6 leading-relaxed max-w-md">
-              {texts.companyDescription}
+              {currentLang === 'zh' ? 
+                "专业的挖掘机配件制造商，致力于为全球客户提供高质量的产品和服务。" : 
+                "Professional excavator parts manufacturer, committed to providing high-quality products and services to global customers."}
             </p>
             <div className="flex space-x-4">
               {socialLinks.map((social, index) => {
@@ -129,7 +104,7 @@ const Footer: React.FC = () => {
           <div className="text-center md:text-left">
             <h3 className="text-lg font-semibold mb-4 flex items-center justify-center md:justify-start">
               <HiOutlineGlobeAlt className="w-5 h-5 mr-2 text-blue-400" />
-              {texts.quickLinks}
+              {currentLang === 'zh' ? "快速链接" : "Quick Links"}
             </h3>
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
@@ -150,21 +125,21 @@ const Footer: React.FC = () => {
           <div className="text-center md:text-left">
             <h3 className="text-lg font-semibold mb-4 flex items-center justify-center md:justify-start">
               <HiOutlineMail className="w-5 h-5 mr-2 text-blue-400" />
-              {texts.contactInfo}
+              {currentLang === 'zh' ? "联系信息" : "Contact Info"}
             </h3>
             <div className="space-y-3">
               <div className="flex items-center text-gray-300 group justify-center md:justify-start">
                 <HiOutlineMail className="w-5 h-5 mr-3 text-blue-400 transition-transform duration-200 group-hover:scale-110" />
-                <span className="transition-colors duration-200 group-hover:text-white">info@xinhang.com</span>
+                <span className="transition-colors duration-200 group-hover:text-white">{COMPANY_INFO.EMAIL}</span>
               </div>
               <div className="flex items-center text-gray-300 group justify-center md:justify-start">
                 <HiOutlinePhone className="w-5 h-5 mr-3 text-blue-400 transition-transform duration-200 group-hover:scale-110" />
-                <span className="transition-colors duration-200 group-hover:text-white">+86 123 4567 8900</span>
+                <span className="transition-colors duration-200 group-hover:text-white">{COMPANY_INFO.PHONE}</span>
               </div>
               <div className="flex items-start text-gray-300 group justify-center md:justify-start">
                 <HiOutlineLocationMarker className="w-5 h-5 mr-3 mt-0.5 text-blue-400 transition-transform duration-200 group-hover:scale-110" />
                 <span className="transition-colors duration-200 group-hover:text-white text-center md:text-left">
-                  中国上海市浦东新区<br />张江高科技园区
+                  {addressText}
                 </span>
               </div>
             </div>
@@ -175,15 +150,15 @@ const Footer: React.FC = () => {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
-              © {currentYear} {texts.companyName}. {texts.allRightsReserved}.
+              © {currentYear} {texts.companyName}. {currentLang === 'zh' ? "保留所有权利" : "All Rights Reserved"}.
             </p>
             <div className="flex items-center justify-center space-x-4 text-sm text-gray-400">
-              <Link href="/privacy" className="hover:text-white transition-colors duration-200">
-                {texts.privacyPolicy}
+              <Link href={ROUTES.PRIVACY} className="hover:text-white transition-colors duration-200">
+                {currentLang === 'zh' ? "隐私政策" : "Privacy Policy"}
               </Link>
               <span>|</span>
-              <Link href="/terms" className="hover:text-white transition-colors duration-200">
-                {texts.termsOfService}
+              <Link href={ROUTES.TERMS} className="hover:text-white transition-colors duration-200">
+                {currentLang === 'zh' ? "服务条款" : "Terms of Service"}
               </Link>
             </div>
           </div>
