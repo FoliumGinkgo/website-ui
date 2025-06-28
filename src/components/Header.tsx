@@ -12,6 +12,7 @@ import {
 } from 'react-icons/hi';
 import { API_BASE_URL, API_ENDPOINTS, buildApiUrl } from '@/config/api';
 import { getTexts, type TextConfig } from '@/config/texts';
+import { getImageUrl } from '@/utils/imageUtils';
 
 // 语言接口定义
 interface Language {
@@ -72,18 +73,7 @@ const Header: React.FC = () => {
       const data = await response.json();
       
       if (data.code === 200 && data.data) {
-        const languageList = data.data
-          .filter((lang: any) => lang.status === '0')
-          .sort((a: any, b: any) => a.sort - b.sort)
-          .map((lang: any) => ({
-            id: lang.id,
-            name: lang.name,
-            logo: lang.logo.startsWith('http') ? lang.logo : `${API_BASE_URL}${lang.logo}`,
-            flag: lang.flag,
-            sort: lang.sort,
-            status: lang.status
-          }));
-        
+        const languageList = data.data;
         setLanguages(languageList);
         
         // 查找英文语言，如果没有则使用第一个
@@ -98,15 +88,6 @@ const Header: React.FC = () => {
       }
     } catch (error) {
       console.error('获取语言列表失败:', error);
-      // 设置默认语言
-      setLanguages([{
-        id: 1,
-        name: 'English',
-        logo: '/logo.png',
-        flag: 'en',
-        sort: 1,
-        status: '0'
-      }]);
     } finally {
       setLoading(false);
     }
@@ -207,23 +188,20 @@ const Header: React.FC = () => {
     <>
       <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-24">
             {/* Logo区域 */}
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center group outline-none">
-                <div className="h-8 w-8 relative transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
+                <div className="h-16 w-16 relative transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
                   <Image
                     src="/logo.png"
                     alt={texts.companyName}
-                    width={32}
-                    height={32}
-                    className="object-contain"
+                    width={64}
+                    height={64}
+                    className="object-contain w-full h-auto"
                     priority
                   />
                 </div>
-                <span className="ml-2 text-xl font-bold text-gray-900 transition-colors duration-300 group-hover:text-blue-600">
-                  {texts.companyName}
-                </span>
               </Link>
             </div>
 
@@ -277,15 +255,11 @@ const Header: React.FC = () => {
                 >
                   {currentLanguage && (
                     <Image
-                      src={currentLanguage.logo}
+                      src={getImageUrl(currentLanguage.logo)}
                       alt={currentLanguage.name}
                       width={16}
                       height={16}
-                      className="object-contain"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = '/logo.png';
-                      }}
+                      className="object-contain w-[16px] h-auto"
                     />
                   )}
                   <span className="text-xs">{currentLanguage?.name}</span>
@@ -304,15 +278,11 @@ const Header: React.FC = () => {
                         }`}
                       >
                         <Image
-                          src={language.logo}
+                          src={getImageUrl(currentLanguage.logo)}
                           alt={language.name}
                           width={20}
                           height={20}
                           className="object-contain transition-transform duration-200 group-hover:scale-110"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = '/logo.png';
-                          }}
                         />
                         <span className="flex-1">{language.name}</span>
                         {currentLang === language.flag && (
@@ -332,15 +302,11 @@ const Header: React.FC = () => {
                 >
                   {currentLanguage && (
                     <Image
-                      src={currentLanguage.logo}
+                      src={getImageUrl(currentLanguage.logo)}
                       alt={currentLanguage.name}
                       width={16}
                       height={16}
-                      className="object-contain"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = '/logo.png';
-                      }}
+                      className="object-contain w-[16px] h-auto"
                     />
                   )}
                   <span>{currentLanguage?.name}</span>
@@ -358,15 +324,11 @@ const Header: React.FC = () => {
                         }`}
                       >
                         <Image
-                          src={language.logo}
+                          src={getImageUrl(language.logo)}
                           alt={language.name}
                           width={20}
                           height={20}
                           className="object-contain transition-transform duration-200 group-hover:scale-110"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = '/logo.png';
-                          }}
                         />
                         <span className="flex-1">{language.name}</span>
                         {currentLang === language.flag && (

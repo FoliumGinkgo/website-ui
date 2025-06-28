@@ -16,8 +16,6 @@ import {
   FaInstagram
 } from 'react-icons/fa';
 
-// API基础URL
-const API_BASE_URL = 'http://47.113.217.170:5555/prod-api';
 
 // 文本接口
 interface FooterTexts {
