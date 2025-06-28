@@ -11,6 +11,7 @@ import {
   HiX
 } from 'react-icons/hi';
 import { API_BASE_URL, API_ENDPOINTS, buildApiUrl } from '@/config/api';
+import { getTexts, type TextConfig } from '@/config/texts';
 
 // 语言接口定义
 interface Language {
@@ -29,34 +30,11 @@ interface MenuItem {
   href: string;
 }
 
-// 文本接口
-interface Texts {
-  home: string;
-  about: string;
-  products: string;
-  contact: string;
-  search: string;
-  searchPlaceholder: string;
-  menu: string;
-  companyName: string;
-  language: string;
-}
-
 const Header: React.FC = () => {
   // 状态管理
   const [languages, setLanguages] = useState<Language[]>([]);
-  const [currentLang, setCurrentLang] = useState<string>('en'); // 默认改为英文
-  const [texts, setTexts] = useState<Texts>({
-    home: 'Home',
-    about: 'About Us',
-    products: 'Products',
-    contact: 'Contact Us',
-    search: 'Search',
-    searchPlaceholder: 'Search products...',
-    menu: 'Menu',
-    companyName: 'Xinhang Company',
-    language: 'Language'
-  });
+  const [currentLang, setCurrentLang] = useState<string>('en');
+  const [texts, setTexts] = useState<TextConfig>(getTexts('en'));
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const [isMobileLanguageOpen, setIsMobileLanguageOpen] = useState(false);
@@ -112,8 +90,10 @@ const Header: React.FC = () => {
         const englishLang = languageList.find((lang: Language) => lang.flag === 'en');
         if (englishLang) {
           setCurrentLang('en');
+          setTexts(getTexts('en'));
         } else if (languageList.length > 0) {
           setCurrentLang(languageList[0].flag);
+          setTexts(getTexts(languageList[0].flag));
         }
       }
     } catch (error) {
@@ -187,9 +167,9 @@ const Header: React.FC = () => {
   // 语言切换处理
   const handleLanguageChange = (langFlag: string) => {
     setCurrentLang(langFlag);
+    setTexts(getTexts(langFlag));
     setIsLanguageDropdownOpen(false);
     setIsMobileLanguageOpen(false);
-    // TODO: 根据语言更新文本内容
   };
 
   // 搜索框切换
@@ -231,16 +211,19 @@ const Header: React.FC = () => {
             {/* Logo区域 */}
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center group outline-none">
-                <div className="h-16 w-16 relative transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
+                <div className="h-8 w-8 relative transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
                   <Image
                     src="/logo.png"
                     alt={texts.companyName}
                     width={32}
                     height={32}
-                    className="object-contain h-[64px] w-auto"
+                    className="object-contain"
                     priority
                   />
                 </div>
+                <span className="ml-2 text-xl font-bold text-gray-900 transition-colors duration-300 group-hover:text-blue-600">
+                  {texts.companyName}
+                </span>
               </Link>
             </div>
 
