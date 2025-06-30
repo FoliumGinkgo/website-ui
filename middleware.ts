@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-
-// 支持的语言列表
-const locales = ['en', 'zh'];
+import { getSupportedLocaleCodes } from './src/config/languageConfig';
 
 // 获取请求的语言，优先使用路径中的语言，其次是Accept-Language头
 function getLocale(request: NextRequest) {
+  // 获取支持的语言代码列表
+  const locales = getSupportedLocaleCodes();
+  
   // 检查URL路径中是否已经包含语言代码
   const pathname = request.nextUrl.pathname;
   const pathnameLocale = locales.find(
@@ -28,11 +29,14 @@ function getLocale(request: NextRequest) {
     }
   }
 
-  // 默认返回英语
-  return 'en';
+  // 默认返回英语或第一个可用的语言
+  return locales[0] || 'en';
 }
 
 export function middleware(request: NextRequest) {
+  // 获取支持的语言代码列表
+  const locales = getSupportedLocaleCodes();
+  
   const pathname = request.nextUrl.pathname;
   
   // 如果请求是静态资源或API，不进行重定向

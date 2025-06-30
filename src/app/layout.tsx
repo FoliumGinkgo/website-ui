@@ -5,6 +5,7 @@ import { langRequest } from "@/config/reqest";
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { LANGUAGES } from "@/config/constants";
+import { setSupportedLanguages } from "@/config/languageConfig";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,10 @@ export default async function RootLayout({
   if (languages.length === 0) {
     languages = LANGUAGES;
   }
+  
+  // 设置全局支持的语言列表
+  setSupportedLanguages(languages);
+  
   return (
     <html lang="en" dir="ltr">
       <body

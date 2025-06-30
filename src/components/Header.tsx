@@ -42,9 +42,6 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
   const desktopSearchOverlayRef = useRef<HTMLDivElement>(null);
   const mobileSearchOverlayRef = useRef<HTMLDivElement>(null);
 
-  
-  console.log("languages");
-  console.log(languages);
   // 获取当前语言对象
   const currentLanguage = languages.find(lang => lang.flag === currentLang) || languages[0];
 
@@ -101,6 +98,28 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
     setCurrentLang(langFlag);
     setIsLanguageDropdownOpen(false);
     setIsMobileLanguageOpen(false);
+    
+    // 获取当前路径
+    const pathname = window.location.pathname;
+    
+    // 提取当前路径中的语言代码和路径部分
+    const pathParts = pathname.split('/');
+    if (pathParts.length > 1) {
+      // 检查第一个路径段是否是语言代码
+      const currentLangInPath = languages.some(lang => lang.flag === pathParts[1]);
+      
+      if (currentLangInPath) {
+        // 替换路径中的语言代码
+        pathParts[1] = langFlag;
+        const newPath = pathParts.join('/');
+        
+        // 导航到新路径
+        window.location.href = newPath + window.location.search;
+      } else {
+        // 如果当前路径中没有语言代码，添加新的语言代码
+        window.location.href = `/${langFlag}${pathname}` + window.location.search;
+      }
+    }
   };
 
   // 搜索框切换

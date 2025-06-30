@@ -10,9 +10,7 @@ export const ROUTES: MenuItem[] = [
   { label: 'HOME', href: '/' },
   { label: 'ABOUT', href: '/about' },
   { label: 'PRODUCTS', href: '/bucket-teeth'},
-  { label: 'CONTACT', href: '/contact' },
-  // { label: 'PRIVACY', href: '/privacy' },
-  // { label: 'TERMS', href: '/terms' },
+  { label: 'CONTACT', href: '/contact' }
 ];
 
 // 默认公司信息
