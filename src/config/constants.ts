@@ -28,6 +28,7 @@ export const BASE_TEXT: TextConfig = {
   searchPlaceholder: 'Search products...',
   companyName: 'Xinhang Company',
   language: 'Language',
+  contact: 'Contact',
 
   // Footer
   quickLinks: 'Quick Links',

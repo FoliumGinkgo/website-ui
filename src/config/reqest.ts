@@ -1,4 +1,5 @@
 import { buildApiUrl, API_ENDPOINTS } from "./api";
+import { CONTACT_US_HINT } from "./constants";
 import { AboutUs, ContactUsHint } from "./structure";
 
 //语言接口请求
@@ -41,7 +42,7 @@ export const contactUsRequest = async (lang: string) => {
   try {
     const res = await fetch(buildApiUrl(API_ENDPOINTS.CONTACT_US_HINT + `?lang=${lang}`));
     const data = await res.json();
-    return data ? data.data:{} as ContactUsHint;
+    return data ? data.data:CONTACT_US_HINT;
   } catch (error) {
     console.error('Error:', error);
     throw error;

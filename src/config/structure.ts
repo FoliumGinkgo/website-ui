@@ -37,6 +37,7 @@ export interface TextConfig {
   searchPlaceholder: string;
   companyName: string;
   language: string;
+  contact: string;
 
   // Footer 相关文本
   companyDesc:string;
