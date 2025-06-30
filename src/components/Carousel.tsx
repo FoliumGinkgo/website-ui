@@ -4,29 +4,15 @@ import { useState, useEffect } from 'react';
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { getImageUrl } from '@/utils/imageUtils';
 import { BASE_TEXT } from '@/config/constants';
-import { carouselRequest } from '@/config/reqest';
 import { CarouselItem } from '@/config/structure';
 
 
-const Carousel = () => {
-  const [carouselData, setCarouselData] = useState<CarouselItem[]>([]);
+const Carousel = ({ carouselData }: { carouselData: CarouselItem[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-  
-
   // 获取轮播图数据
   useEffect(() => {
-    const fetchCarouselData = async () => {
-      try {
-        setLoading(true);
-        const carouselData = await carouselRequest();
-        setCarouselData(carouselData);
-      } catch (err) {
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCarouselData();
+    setLoading(false);
   }, []);
 
   // 自动轮播
@@ -34,7 +20,7 @@ const Carousel = () => {
     if (carouselData.length <= 1) return;
 
     const timer = setInterval(() => {
-      setCurrentIndex((prevIndex) => 
+      setCurrentIndex((prevIndex) =>
         prevIndex === carouselData.length - 1 ? 0 : prevIndex + 1
       );
     }, 5000);
@@ -73,7 +59,7 @@ const Carousel = () => {
   return (
     <div className="relative w-full h-[60vh] md:h-[50vh] lg:h-[80vh] overflow-hidden">
       {/* 轮播图片容器 - 全宽度显示 */}
-      <div 
+      <div
         className="flex transition-transform duration-500 ease-in-out h-full"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
@@ -97,14 +83,14 @@ const Carousel = () => {
           <button
             onClick={goToPrevious}
             className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-1 md:p-2 rounded-full transition-all duration-200 backdrop-blur-sm z-10"
-            aria-label={BASE_TEXT.previous}
+            aria-label="Previous"
           >
             <MdChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
           </button>
           <button
             onClick={goToNext}
             className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-1 md:p-2 rounded-full transition-all duration-200 backdrop-blur-sm z-10"
-            aria-label={BASE_TEXT.next}
+            aria-label="Next"
           >
             <MdChevronRight className="w-5 h-5 md:w-6 md:h-6" />
           </button>
@@ -117,12 +103,11 @@ const Carousel = () => {
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-200 ${
-                index === currentIndex
+              className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-200 ${index === currentIndex
                   ? 'bg-white scale-110'
                   : 'bg-white/50 hover:bg-white/75'
-              }`}
-              aria-label={`${BASE_TEXT.goToSlide} ${index + 1}`}
+                }`}
+              aria-label={`go to slide ${index + 1}`}
             />
           ))}
         </div>

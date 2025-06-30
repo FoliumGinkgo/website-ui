@@ -31,22 +31,44 @@ export interface SocialLink {
 // 多语言文本配置
 export interface TextConfig {
   // Header 相关文本
-  home: string;
-  about: string;
+  aboutUs: string;
   products: string;
-  contact: string;
-  search: string;
+  contactUs: string;
   searchPlaceholder: string;
-  menu: string;
   companyName: string;
   language: string;
-  
-  // Carousel 相关文本
-  previous: string;
-  next: string;
-  goToSlide: string;
 
   // Footer 相关文本
-  contactInfo: string;
+  companyDesc:string;
   quickLinks: string;
+  address: string;
+  copyrightInfo: string;
+}
+
+
+export interface Product {
+  id: number;
+  categoryId: number;
+  productName: string;
+  images: string[];
+  details: string;
+}
+
+export interface ContactUsHint {
+  id: number;
+  name: string;
+  lang: string;
+  email: string;
+  contact: string;
+  company: string;
+  details: string;
+  code: string;
+  send: string;
+}
+
+export interface AboutUs {
+  id: number;
+  name: string;
+  lang: string;
+  aboutUs: string;
 }

@@ -1,16 +1,10 @@
-// 服务器组件，不需要'use client'声明
-import { API_ENDPOINTS, buildApiUrl } from '@/config/api';
+
 import React from 'react';
 import Image from 'next/image';
 import { getImageUrl } from '@/utils/imageUtils';
+import { productsRequest } from '@/config/reqest';
+import { Product } from '@/config/structure';
 
-interface Product {
-  id: number;
-  categoryId: number;
-  productName: string;
-  images: string[];
-  details: string;
-}
 
 // 在App Router中，页面组件默认是服务器组件，可以直接获取数据
 export default async function BucketTeeth({ params }: { params: { lang: string } }) {
@@ -21,13 +15,8 @@ export default async function BucketTeeth({ params }: { params: { lang: string }
   let products: Product[] = [];
   
   try {
-    const res = await fetch(buildApiUrl(API_ENDPOINTS.PRODUCT));
-    
-    const data = await res.json();
-    
-    if (data && data.rows && Array.isArray(data.rows)) {
-      products = data.rows;
-    }
+    const data = await productsRequest();
+    products = data;
   } catch (error) {
     console.error('Failed to fetch product data:', error);
   }

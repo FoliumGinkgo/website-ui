@@ -23,7 +23,7 @@ const Navigation: React.FC<NavigationProps> = ({
         {items.map((item, index) => (
           <Link
             key={index}
-            href={item.href}
+            href={`/${lang}${item.href}`}
             className="block px-3 py-2.5 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 transform hover:translate-x-1 text-center"
             onClick={onItemClick}
             style={{ animationDelay: `${index * 50}ms` }}

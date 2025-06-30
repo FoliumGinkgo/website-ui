@@ -185,11 +185,9 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
               <div className="hidden md:block relative" ref={searchRef}>
                 <button
                   onClick={toggleSearch}
-                  className="flex items-center space-x-2 p-2 text-gray-600 hover:text-blue-600 transition-all duration-200 rounded-lg hover:bg-blue-50 group"
-                  aria-label={baseText.search}
+                  className="flex items-center space-x-2 py-2.5 px-5 text-gray-600 hover:text-blue-600 transition-all duration-200 rounded-lg hover:bg-blue-50 group"
                 >
                   <HiOutlineSearch className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
-                  <span className="text-sm font-medium">{baseText.search}</span>
                 </button>
               </div>
 
@@ -198,7 +196,6 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                 <button
                   onClick={toggleMobileSearch}
                   className="p-2 text-gray-400 hover:text-gray-600 transition-all duration-200 rounded-lg hover:bg-gray-100"
-                  aria-label={baseText.search}
                 >
                   <HiOutlineSearch className="w-5 h-5" />
                 </button>
@@ -302,7 +299,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                   ref={mobileMenuButtonRef}
                   onClick={toggleMobileMenu}
                   className="p-2 text-gray-400 hover:text-gray-600 transition-all duration-200 rounded-lg hover:bg-gray-100 group relative"
-                  aria-label={baseText.menu}
+                  aria-label="Menu"
                 >
                   <HiOutlineMenu className={`w-6 h-6 transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0 rotate-90' : 'opacity-100 rotate-0'}`} />
                   <HiX className={`w-6 h-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${isMobileMenuOpen ? 'opacity-100 rotate-0' : 'opacity-0 -rotate-90'}`} />

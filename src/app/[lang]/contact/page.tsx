@@ -1,12 +1,15 @@
-'use client';
-
-import React from 'react';
+import {  } from "@/config/reqest";
 
 
-export default function ContactUs() {
+export default async function ContactUs({ params }: { params: { lang: string } }) {
+  // 从params中获取动态路由参数
+  const { lang } = params;
+  
   return (
-    <div className="">
-      
+    <div className="w-full">
+      <div>
+
+      </div>
     </div>
   );
 }

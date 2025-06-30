@@ -16,33 +16,35 @@ export const ROUTES: MenuItem[] = [
 // 默认公司信息
 export const COMPANY_INFO = {
   EMAIL: 'info@xinhang.com',
-  PHONE: '+86 123 4567 8900',
-  ADDRESS: 'Zhangjiang Hi-Tech Park, Pudong New Area, Shanghai, China'
+  PHONE: '+86 123 4567 8900'
 };
 
 // 英文文本
 export const BASE_TEXT: TextConfig = {
   // Header
-  home: 'Home',
-  about: 'About Us',
+  aboutUs: 'About Us',
   products: 'Products',
-  contact: 'Contact Us',
-  search: 'Search',
+  contactUs: 'Contact Us',
   searchPlaceholder: 'Search products...',
-  menu: 'Menu',
   companyName: 'Xinhang Company',
   language: 'Language',
-  
-  // Carousel
-  previous: 'Previous',
-  next: 'Next',
-  goToSlide: 'Go to slide',
 
   // Footer
-  contactInfo: 'Contact Info',
   quickLinks: 'Quick Links',
+  companyDesc: "Professional excavator parts manufacturer, committed to providing high-quality products and services to global customers.",
+  address: 'Zhangjiang Hi-Tech Park, Pudong New Area, Shanghai, China',
+  copyrightInfo: '© Copyright 2023 Xinhang Company. All Rights Reserved.',
 };
-
+// 联系我们提示
+export const CONTACT_US_HINT = {
+  name: 'Your Name',
+  email: 'E-mail',
+  contact: 'Phone/WeChat/WhatsApp',
+  company: 'Company Name',
+  details: 'Details',
+  code: 'Enter the verification code',
+  send: 'Send',
+}
 // 语言配置
 export const LANGUAGES: Language[] = [
   {

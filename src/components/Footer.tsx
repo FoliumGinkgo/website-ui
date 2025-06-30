@@ -14,13 +14,12 @@ import { ROUTES, COMPANY_INFO, SOCIAL_LINKS, BASE_TEXT} from '@/config/constants
 const Footer: React.FC = () => {
   // 使用英文作为默认语言
   const [currentLang] = useState<string>('en');
-  
-  const currentYear = new Date().getFullYear();
+
 
   return (
     <footer className="bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 pb-3 lg:grid-cols-4 gap-8">
           {/* 公司信息区域 */}
           <div className="lg:col-span-2">
             <div className="flex items-center mb-4 group">
@@ -39,9 +38,7 @@ const Footer: React.FC = () => {
               </span>
             </div>
             <p className="text-gray-300 mb-6 leading-relaxed max-w-md">
-              {currentLang === 'zh' ? 
-                "专业的挖掘机配件制造商，致力于为全球客户提供高质量的产品和服务。" : 
-                "Professional excavator parts manufacturer, committed to providing high-quality products and services to global customers."}
+              {BASE_TEXT.companyDesc}
             </p>
             <div className="flex space-x-4">
               {SOCIAL_LINKS.map((social, index) => {
@@ -86,7 +83,7 @@ const Footer: React.FC = () => {
           <div className="text-center md:text-left">
             <h3 className="text-lg font-semibold mb-4 flex items-center justify-center md:justify-start">
               <HiOutlineMail className="w-5 h-5 mr-2 text-blue-400" />
-              {BASE_TEXT.contactInfo}
+              {BASE_TEXT.contactUs}
             </h3>
             <div className="space-y-3">
               <div className="flex items-center text-gray-300 group justify-center md:justify-start">
@@ -100,7 +97,7 @@ const Footer: React.FC = () => {
               <div className="flex items-start text-gray-300 group justify-center md:justify-start">
                 <HiOutlineLocationMarker className="w-5 h-5 mr-3 mt-0.5 text-blue-400 transition-transform duration-200 group-hover:scale-110" />
                 <span className="transition-colors duration-200 group-hover:text-white text-center md:text-left">
-                  {COMPANY_INFO.ADDRESS}
+                  {BASE_TEXT.address}
                 </span>
               </div>
             </div>
@@ -108,10 +105,10 @@ const Footer: React.FC = () => {
         </div>
 
         {/* 底部版权区域 */}
-        <div className="border-t border-gray-800 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
-            <p className="text-gray-400 text-sm mb-4 md:mb-0">
-              © {currentYear} {BASE_TEXT.companyName}. {currentLang === 'zh' ? "保留所有权利" : "All Rights Reserved"}.
+        <div className="border-t border-gray-800">
+          <div className="flex flex-col md:flex-row justify-center items-center text-center md:text-left">
+            <p className="text-gray-400 text-sm md:mb-0 text-center pt-5">
+              {BASE_TEXT.copyrightInfo}
             </p>
           </div>
         </div>
