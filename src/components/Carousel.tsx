@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { buildApiUrl, API_ENDPOINTS } from '@/config/api';
 import { getImageUrl } from '@/utils/imageUtils';
-import { getTexts } from '@/config/texts';
+import { BASE_TEXT } from '@/config/constants';
 
 // 轮播图数据接口
 interface CarouselItem {
@@ -28,8 +28,6 @@ const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   
-  // 使用英文文本作为默认
-  const texts = getTexts('en');
 
   // 获取轮播图数据
   useEffect(() => {
@@ -98,7 +96,7 @@ const Carousel = () => {
   if (loading) {
     return (
       <div className="w-full h-[50vh] md:h-[60vh] lg:h-[70vh] bg-gray-200 animate-pulse flex items-center justify-center">
-        <div className="text-gray-500">{texts.loading}</div>
+        <div className="text-gray-500">{BASE_TEXT.loading}</div>
       </div>
     );
   }
@@ -107,7 +105,7 @@ const Carousel = () => {
   if (carouselData.length === 0) {
     return (
       <div className="w-full h-[50vh] md:h-[60vh] lg:h-[70vh] bg-gray-100 flex items-center justify-center">
-        <div className="text-gray-500">{texts.noDataAvailable}</div>
+        <div className="text-gray-500">{BASE_TEXT.noDataAvailable}</div>
       </div>
     );
   }
@@ -139,14 +137,14 @@ const Carousel = () => {
           <button
             onClick={goToPrevious}
             className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-1 md:p-2 rounded-full transition-all duration-200 backdrop-blur-sm z-10"
-            aria-label={texts.previous}
+            aria-label={BASE_TEXT.previous}
           >
             <MdChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
           </button>
           <button
             onClick={goToNext}
             className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-1 md:p-2 rounded-full transition-all duration-200 backdrop-blur-sm z-10"
-            aria-label={texts.next}
+            aria-label={BASE_TEXT.next}
           >
             <MdChevronRight className="w-5 h-5 md:w-6 md:h-6" />
           </button>
@@ -164,7 +162,7 @@ const Carousel = () => {
                   ? 'bg-white scale-110'
                   : 'bg-white/50 hover:bg-white/75'
               }`}
-              aria-label={`${texts.goToSlide} ${index + 1}`}
+              aria-label={`${BASE_TEXT.goToSlide} ${index + 1}`}
             />
           ))}
         </div>

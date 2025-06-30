@@ -11,7 +11,8 @@ const nextConfig = {
         pathname: '/prod-api/**',   // 匹配你的图片路径
       },
     ],
-  }
+  },
+  // 移除i18n配置，因为它与App Router不兼容
 };
 
 export default nextConfig;
