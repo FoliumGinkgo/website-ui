@@ -34,9 +34,6 @@ export const BASE_TEXT: TextConfig = {
   language: 'Language',
   
   // Carousel
-  loading: 'Loading...',
-  loadingFailed: 'Loading failed',
-  noDataAvailable: 'No carousel data available',
   previous: 'Previous',
   next: 'Next',
   goToSlide: 'Go to slide',

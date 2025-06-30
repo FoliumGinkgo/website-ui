@@ -2,26 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import { buildApiUrl, API_ENDPOINTS } from '@/config/api';
 import { getImageUrl } from '@/utils/imageUtils';
 import { BASE_TEXT } from '@/config/constants';
+import { carouselRequest } from '@/config/reqest';
+import { CarouselItem } from '@/config/structure';
 
-// 轮播图数据接口
-interface CarouselItem {
-  id: number;
-  name: string;
-  sort: number;
-  image: string;
-  status: string;
-  delFlag: string;
-}
-
-// API响应接口
-interface CarouselResponse {
-  msg: string;
-  code: number;
-  data: CarouselItem[];
-}
 
 const Carousel = () => {
   const [carouselData, setCarouselData] = useState<CarouselItem[]>([]);
@@ -34,29 +19,13 @@ const Carousel = () => {
     const fetchCarouselData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(buildApiUrl(API_ENDPOINTS.CAROUSEL));
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const result: CarouselResponse = await response.json();
-        
-        if (result.code === 200 && result.data) {
-          // 过滤有效数据并按sort排序
-          const validData = result.data
-            .filter(item => item.status === '0' && item.delFlag === '0')
-            .sort((a, b) => a.sort - b.sort);
-          setCarouselData(validData);
-        }
+        const carouselData = await carouselRequest();
+        setCarouselData(carouselData);
       } catch (err) {
-        console.error('获取轮播图数据失败:', err);
-        // 简化错误处理：静默失败，不显示错误信息
       } finally {
         setLoading(false);
       }
     };
-
     fetchCarouselData();
   }, []);
 
@@ -95,23 +64,14 @@ const Carousel = () => {
   // 加载状态
   if (loading) {
     return (
-      <div className="w-full h-[50vh] md:h-[60vh] lg:h-[70vh] bg-gray-200 animate-pulse flex items-center justify-center">
-        <div className="text-gray-500">{BASE_TEXT.loading}</div>
-      </div>
-    );
-  }
-
-  // 无数据状态（移除错误状态显示）
-  if (carouselData.length === 0) {
-    return (
-      <div className="w-full h-[50vh] md:h-[60vh] lg:h-[70vh] bg-gray-100 flex items-center justify-center">
-        <div className="text-gray-500">{BASE_TEXT.noDataAvailable}</div>
+      <div className="w-full h-[60vh] md:h-[50vh] lg:h-[80vh] bg-gray-200 animate-pulse flex items-center justify-center">
+        <div className="text-gray-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
+    <div className="relative w-full h-[60vh] md:h-[50vh] lg:h-[80vh] overflow-hidden">
       {/* 轮播图片容器 - 全宽度显示 */}
       <div 
         className="flex transition-transform duration-500 ease-in-out h-full"

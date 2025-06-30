@@ -12,6 +12,15 @@ export interface Language {
   sort: number;
   status: string;
 }
+// 轮播图数据接口
+export interface CarouselItem {
+  id: number;
+  name: string;
+  sort: number;
+  image: string;
+  status: string;
+  delFlag: string;
+}
 // 社交媒体链接接口
 export interface SocialLink {
   icon: React.ComponentType<{ className?: string }>;
@@ -33,9 +42,6 @@ export interface TextConfig {
   language: string;
   
   // Carousel 相关文本
-  loading: string;
-  loadingFailed: string;
-  noDataAvailable: string;
   previous: string;
   next: string;
   goToSlide: string;
