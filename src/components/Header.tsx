@@ -12,12 +12,15 @@ import {
 } from 'react-icons/hi';
 import { getImageUrl } from '@/utils/imageUtils';
 import Navigation from '@/components/Navigation';
-import { BASE_TEXT, ROUTES } from '@/config/constants';
-import { Language, TextConfig } from '@/config/structure';
+import { BASE_TEXT } from '@/config/constants';
+import { Language } from '@/config/structure';
+import { useGlobalData } from '@/context/GlobalContext';
+
+// 本地存储键名
+const LANGUAGE_STORAGE_KEY = 'preferred_language';
 
 const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
   const [currentLang, setCurrentLang] = useState<string>('en');
-  const [baseText, setBaseText] = useState<TextConfig>(BASE_TEXT);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const [isMobileLanguageOpen, setIsMobileLanguageOpen] = useState(false);
@@ -26,11 +29,30 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // 添加这个useEffect来初始化组件
+  const { textConfig } = useGlobalData();
+  const baseInfo = textConfig || BASE_TEXT;
+
+  // 添加这个useEffect来初始化组件和从本地存储加载语言设置
   useEffect(() => {
+    // 从本地存储获取保存的语言
+    if (typeof window !== 'undefined') {
+      try {
+        const savedLang = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+        if (savedLang) {
+          // 检查保存的语言是否在当前支持的语言列表中
+          const isValidLang = languages.some(lang => lang.lang === savedLang);
+          if (isValidLang) {
+            setCurrentLang(savedLang);
+          }
+        }
+      } catch (error) {
+        console.error('无法从本地存储读取语言设置:', error);
+      }
+    }
+    
     // 组件挂载后，将loading设置为false
     setLoading(false);
-  }, []);
+  }, [languages]);
   
   // DOM引用
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -43,7 +65,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
   const mobileSearchOverlayRef = useRef<HTMLDivElement>(null);
 
   // 获取当前语言对象
-  const currentLanguage = languages.find(lang => lang.flag === currentLang) || languages[0];
+  const currentLanguage = languages.find(lang => lang.lang === currentLang) || languages[0];
 
 
   // 处理点击外部区域关闭菜单
@@ -95,6 +117,16 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
 
   // 语言切换处理
   const handleLanguageChange = (langFlag: string) => {
+    
+    // 保存语言选择到本地存储
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, langFlag);
+      }
+    } catch (error) {
+      console.error('无法保存语言设置到本地存储:', error);
+    }
+    
     setCurrentLang(langFlag);
     setIsLanguageDropdownOpen(false);
     setIsMobileLanguageOpen(false);
@@ -106,7 +138,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
     const pathParts = pathname.split('/');
     if (pathParts.length > 1) {
       // 检查第一个路径段是否是语言代码
-      const currentLangInPath = languages.some(lang => lang.flag === pathParts[1]);
+      const currentLangInPath = languages.some(lang => lang.lang === pathParts[1]);
       
       if (currentLangInPath) {
         // 替换路径中的语言代码
@@ -117,8 +149,13 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
         window.location.href = newPath + window.location.search;
       } else {
         // 如果当前路径中没有语言代码，添加新的语言代码
-        window.location.href = `/${langFlag}${pathname}` + window.location.search;
+        // 修复：确保路径格式正确
+        const cleanPath = pathname.startsWith('/') ? pathname : `/${pathname}`;
+        window.location.href = `/${langFlag}${cleanPath === '/' ? '' : cleanPath}` + window.location.search;
       }
+    } else {
+      // 处理极端情况：路径为空或只有根路径
+      window.location.href = `/${langFlag}` + window.location.search;
     }
   };
 
@@ -164,9 +201,9 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                 <div className="h-16 w-16 relative transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
                   <Image
                     src="/logo.png"
-                    alt={baseText.companyName}
-                    width={64}
-                    height={64}
+                    alt={baseInfo.baseInfo.companyName}
+                    fill
+                    sizes="64px"
                     className="object-contain w-full h-auto"
                     priority
                   />
@@ -176,7 +213,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
 
             {/* 中间导航区域 */}
             <div className="hidden md:flex items-center space-x-6">
-              <Navigation items={ROUTES} lang={currentLang} />
+              <Navigation items={baseInfo.navigationList} lang={currentLang} />
             </div>
 
             {/* 右侧功能区域 */}
@@ -206,14 +243,15 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                 <button
                   onClick={() => setIsMobileLanguageOpen(!isMobileLanguageOpen)}
                   className="p-2 text-gray-400 hover:text-gray-600 transition-all duration-200 rounded-lg hover:bg-gray-100 flex items-center space-x-1"
-                  aria-label={baseText.language}
+                  aria-label={baseInfo.baseInfo.language}
                 >
                   {currentLanguage && (
                     <Image
-                      src={getImageUrl(currentLanguage.logo)}
+                      src={currentLanguage.id === -1? currentLanguage.logo :getImageUrl(currentLanguage.logo)}
                       alt={currentLanguage.name}
                       width={16}
                       height={16}
+                      sizes='16px'
                       className="object-contain w-[16px] h-auto"
                     />
                   )}
@@ -227,19 +265,19 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                     {languages.map((language) => (
                       <button
                         key={language.id}
-                        onClick={() => handleLanguageChange(language.flag)}
-                        className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-100 transition-all duration-200 flex items-center space-x-3 group ${currentLang === language.flag ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
+                        onClick={() => handleLanguageChange(language.lang)}
+                        className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-100 transition-all duration-200 flex items-center space-x-3 group ${currentLang === language.lang ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
                           }`}
                       >
                         <Image
-                          src={getImageUrl(language.logo)}
+                          src={currentLanguage.id === -1? currentLanguage.logo :getImageUrl(language.logo)}
                           alt={language.name}
                           width={20}
-                          height={20}
-                          className="object-contain transition-transform duration-200 group-hover:scale-110"
+                          sizes='20px'
+                          className="object-contain h-auto transition-transform duration-200 group-hover:scale-110"
                         />
                         <span className="flex-1">{language.name}</span>
-                        {currentLang === language.flag && (
+                        {currentLang === language.lang && (
                           <HiCheck className="w-4 h-4 text-blue-600" />
                         )}
                       </button>
@@ -256,7 +294,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                 >
                   {currentLanguage && (
                     <Image
-                      src={getImageUrl(currentLanguage.logo)}
+                      src={currentLanguage.id === -1? currentLanguage.logo :getImageUrl(currentLanguage.logo)}
                       alt={currentLanguage.name}
                       width={24}
                       height={24}
@@ -272,19 +310,19 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                     {languages.map((language) => (
                       <button
                         key={language.id}
-                        onClick={() => handleLanguageChange(language.flag)}
-                        className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-100 transition-all duration-200 flex items-center space-x-3 group ${currentLang === language.flag ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
+                        onClick={() => handleLanguageChange(language.lang)}
+                        className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-100 transition-all duration-200 flex items-center space-x-3 group ${currentLang === language.lang ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
                           }`}
                       >
                         <Image
-                          src={getImageUrl(language.logo)}
+                          src={currentLanguage.id === -1? currentLanguage.logo :getImageUrl(language.logo)}
                           alt={language.name}
                           width={20}
                           height={20}
-                          className="object-contain transition-transform duration-200 group-hover:scale-110"
+                          className="object-contain h-auto transition-transform duration-200 group-hover:scale-110"
                         />
                         <span className="flex-1">{language.name}</span>
-                        {currentLang === language.flag && (
+                        {currentLang === language.lang && (
                           <HiCheck className="w-4 h-4 text-blue-600" />
                         )}
                       </button>
@@ -311,7 +349,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
           {/* 移动端导航菜单 */}
           <div className={`md:hidden border-t border-gray-200 bg-white transition-all duration-300 overflow-hidden ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
             }`} ref={mobileMenuRef}>
-            <Navigation items={ROUTES} lang={currentLang} mobile={true} onItemClick={() => setIsMobileMenuOpen(false)} />
+            <Navigation items={baseInfo.navigationList} lang={currentLang} mobile={true} onItemClick={() => setIsMobileMenuOpen(false)} />
           </div>
         </div>
       </header>
@@ -326,7 +364,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={baseText.searchPlaceholder}
+                  placeholder={baseInfo.baseInfo.searchPlaceholder}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-md focus:outline-none transition-all duration-300 text-lg"
                   autoFocus
                 />
@@ -347,7 +385,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={baseText.searchPlaceholder}
+                  placeholder={baseInfo.baseInfo.searchPlaceholder}
                   className="w-full pl-8 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none transition-all duration-300 text-base"
                   autoFocus
                 />

@@ -1,17 +1,17 @@
 import { Language, MenuItem, SocialLink, TextConfig } from "@/config/structure";
-import { 
-  FaFacebook, 
-  FaTwitter, 
-  FaLinkedin, 
+import {
+  FaFacebook,
+  FaTwitter,
+  FaLinkedin,
   FaInstagram
 } from 'react-icons/fa';
 // 页面路由
-export const ROUTES: MenuItem[] = [
-  { label: 'HOME', href: '/' },
-  { label: 'ABOUT', href: '/about' },
-  { label: 'PRODUCTS', href: '/bucket-teeth'},
-  { label: 'CONTACT', href: '/contact' }
-];
+// export const ROUTES: MenuItem[] = [
+//   { name: 'HOME', href: '/' },
+//   { name: 'ABOUT', href: '/about' },
+//   { name: 'PRODUCTS', href: '/bucket-teeth'},
+//   { name: 'CONTACT', href: '/contact' }
+// ];
 
 // 默认公司信息
 export const COMPANY_INFO = {
@@ -21,20 +21,38 @@ export const COMPANY_INFO = {
 
 // 英文文本
 export const BASE_TEXT: TextConfig = {
-  // Header
-  aboutUs: 'About Us',
-  products: 'Products',
-  contactUs: 'Contact Us',
-  searchPlaceholder: 'Search products...',
-  companyName: 'Xinhang Company',
-  language: 'Language',
-  contact: 'Contact',
-
-  // Footer
-  quickLinks: 'Quick Links',
-  companyDesc: "Professional excavator parts manufacturer, committed to providing high-quality products and services to global customers.",
-  address: 'Zhangjiang Hi-Tech Park, Pudong New Area, Shanghai, China',
-  copyrightInfo: '© Copyright 2023 Xinhang Company. All Rights Reserved.',
+  navigationList: [
+    {
+      name: 'HOME',
+      href: '/',
+    },
+    {
+      name: 'ABOUT',
+      href: '/about',
+    },
+    {
+      name: 'PRODUCTS',
+      href: '/bucket-teeth',
+    },
+    {
+      name: 'CONTACT',
+      href: '/contact',
+    },
+  ],
+  baseInfo: {
+    aboutUs: 'About Us',
+    products: 'Products',
+    contactUs: 'Contact Us',
+    searchPlaceholder: 'Search products...',
+    companyName: 'Xinhang Company',
+    language: 'Language',
+    contact: 'Contact',
+    //底部Footer
+    quickLinks: 'Quick Links',
+    companyDesc: "Professional excavator parts manufacturer, committed to providing high-quality products and services to global customers.",
+    address: 'Zhangjiang Hi-Tech Park, Pudong New Area, Shanghai, China',
+    copyrightInfo: '© Copyright 2023 Xinhang Company. All Rights Reserved.',
+  },
 };
 // 联系我们提示
 export const CONTACT_US_HINT = {
@@ -50,9 +68,9 @@ export const CONTACT_US_HINT = {
 export const LANGUAGES: Language[] = [
   {
     name: 'English',
-    flag: 'en',
+    lang: 'en',
     logo: '/english.png',
-    id: 0,
+    id: -1,
     sort: 0,
     status: "0"
   }
@@ -60,7 +78,7 @@ export const LANGUAGES: Language[] = [
 
 // 社交媒体链接配置
 export const SOCIAL_LINKS: SocialLink[] = [
-  {icon: FaFacebook, href: '#', label: 'Facebook' },
-  {icon: FaTwitter, href: '#', label: 'Twitter' },
-  {icon: FaInstagram, href: '#', label: 'Instagram' },
+  { icon: FaFacebook, href: '#', label: 'Facebook' },
+  { icon: FaTwitter, href: '#', label: 'Twitter' },
+  { icon: FaInstagram, href: '#', label: 'Instagram' },
 ];

@@ -1,6 +1,6 @@
 // 菜单项接口
 export interface MenuItem {
-  label: string;
+  name: string;
   href: string;
 }
 // 语言接口定义
@@ -8,7 +8,7 @@ export interface Language {
   id: number;
   name: string;
   logo: string;
-  flag: string;
+  lang: string;
   sort: number;
   status: string;
 }
@@ -30,22 +30,38 @@ export interface SocialLink {
 
 // 多语言文本配置
 export interface TextConfig {
-  // Header 相关文本
-  aboutUs: string;
-  products: string;
-  contactUs: string;
-  searchPlaceholder: string;
-  companyName: string;
-  language: string;
-  contact: string;
+  navigationList: MenuItem[];
+  baseInfo: {
+    aboutUs: string;
+    products: string;
+    contactUs: string;
+    searchPlaceholder: string;
+    companyName: string;
+    language: string;
+    contact: string;
+    quickLinks: string;
+    companyDesc: string;
+    address: string;
+    copyrightInfo: string;
+  }
 
-  // Footer 相关文本
-  companyDesc:string;
-  quickLinks: string;
-  address: string;
-  copyrightInfo: string;
 }
 
+// 定义全局数据类型，根据实际需求调整
+export interface GlobalData {
+  [key: string]: any;
+  textConfig: TextConfig;
+  furnishings: Furnishings;
+}
+
+//横图
+export interface Furnishings {
+  id: number;
+  name: string;
+  image: string;
+  status: string;
+  delFlag: string;
+}
 
 export interface Product {
   id: number;

@@ -28,7 +28,7 @@ const Navigation: React.FC<NavigationProps> = ({
             onClick={onItemClick}
             style={{ animationDelay: `${index * 50}ms` }}
           >
-            {item.label}
+            {item.name}
           </Link>
         ))}
       </div>
@@ -43,7 +43,7 @@ const Navigation: React.FC<NavigationProps> = ({
           href={`/${lang}${item.href}`}
           className="text-gray-700 hover:text-blue-600 px-4 py-2 text-sm font-medium transition-all duration-200 relative group rounded-lg hover:bg-blue-50"
         >
-          {item.label}
+          {item.name}
           <span className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 transition-all duration-200 group-hover:w-6 rounded-full"></span>
         </Link>
       ))}
