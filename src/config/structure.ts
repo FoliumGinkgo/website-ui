@@ -43,8 +43,8 @@ export interface TextConfig {
     companyDesc: string;
     address: string;
     copyrightInfo: string;
-  }
-
+  };
+  contactUs: ContactUs[];
 }
 
 // 定义全局数据类型，根据实际需求调整
@@ -53,7 +53,16 @@ export interface GlobalData {
   textConfig: TextConfig;
   furnishings: Furnishings;
 }
-
+export interface ContactUs {
+  id: number;
+  name: string;
+  lang: string;
+  link: string;
+  isLink: string;
+  type: string;
+  status: string;
+  remark: string;
+}
 //横图
 export interface Furnishings {
   id: number;

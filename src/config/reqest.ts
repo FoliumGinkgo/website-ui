@@ -38,7 +38,7 @@ export const aboutUsRequest = async (lang: string) => {
   }
 }
 
-export const contactUsRequest = async (lang: string) => {
+export const contactUsHintRequest = async (lang: string) => {
   try {
     const res = await fetch(buildApiUrl(API_ENDPOINTS.CONTACT_US_HINT + `?lang=${lang}`));
     const data = await res.json();
@@ -48,7 +48,17 @@ export const contactUsRequest = async (lang: string) => {
     return CONTACT_US_HINT; // 返回空对象作为默认值
   }
 }
-
+//
+export const contactRequest = async () => {
+  try {
+    const res = await fetch(buildApiUrl(API_ENDPOINTS.CONTACT));
+    const data = await res.json();
+    return (data && data.rows) ? data.rows : [];
+  } catch (error) {
+    console.error('Error:', error);
+    return []; // 返回空对象作为默认值
+  }
+};
 
 //产品接口请求
 export const productsRequest = async () => {

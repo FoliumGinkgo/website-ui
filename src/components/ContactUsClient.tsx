@@ -12,17 +12,17 @@ export default function ContactUsClient({ contactUsHint }: { contactUsHint: any 
    return (
     <div className="w-full">
       {/* 顶部横幅区域 - 宽度和屏幕宽度一致的横图高度自适应 */}
-      <div className="w-full h-48 bg-gray-200 flex items-center justify-center relative overflow-hidden">
+      <div className="w-full h-64 md:h-80 bg-gray-200 flex items-center justify-center relative overflow-hidden">
         {globalData.furnishings && globalData.furnishings.image ? (
           <Image 
             src={getImageUrl(globalData.furnishings.image)} 
-            alt={globalData.furnishings.name || "Contact Us"}
+            alt={globalData.furnishings.name || "About Us"}
             fill
             className="object-cover w-full h-full"
             priority
           />
         ) : (
-          <h1 className="text-3xl font-bold text-gray-800">{globalData.textConfig.baseInfo.contactUs}</h1>
+          <h1 className="text-3xl font-bold text-gray-800">{globalData.textConfig.baseInfo.aboutUs}</h1>
         )}
       </div>
       

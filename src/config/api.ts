@@ -6,6 +6,7 @@ export const API_BASE_URL = 'http://192.168.3.21/dev-api';
 export const API_ENDPOINTS = {
   LANGUAGE: '/website/language/language',//语言列表
   CAROUSEL: '/website/carousel/carousel',//轮播图
+  CONTACT:'/website/contact/getContact',//联系我们
   PRODUCTS: '/website/product/list',//产品信息列表
   ABOUT_US: '/website/aboutUs/getAboutUs',//关于我们提示
   CONTACT_US_HINT: '/website/contactUsHint/getContactUsHint',//联系我们输入框提示
