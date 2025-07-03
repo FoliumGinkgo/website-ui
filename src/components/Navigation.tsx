@@ -19,7 +19,7 @@ const Navigation: React.FC<NavigationProps> = ({
 }) => {
   if (mobile) {
     return (
-      <div className={`px-2 pt-2 pb-3 space-y-1 ${className}`}>
+      <div className={`px-10 pt-2 pb-3 space-y-1 ${className}`}>
         {items.map((item, index) => (
           <Link
             key={index}

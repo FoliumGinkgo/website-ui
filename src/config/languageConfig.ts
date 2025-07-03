@@ -7,7 +7,7 @@ let supportedLanguages: Language[] = LANGUAGES;
 
 // 获取支持的语言代码列表
 export function getSupportedLocaleCodes(): string[] {
-  return supportedLanguages.map(lang => lang.flag);
+  return supportedLanguages.map(lang => lang.lang);
 }
 
 // 设置支持的语言列表

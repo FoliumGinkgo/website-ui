@@ -58,16 +58,30 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { lang?: string };
 }>) {
   let languages = await langRequest();
   if (languages.length === 0) {
     languages = LANGUAGES;
   }
+  
+  // 设置全局支持的语言列表
+  setSupportedLanguages(languages);
+  
+  // 获取当前支持的语言列表
+  const supportedLanguages = getSupportedLanguages();
+  // 默认使用英语
+  const defaultLang = supportedLanguages.find(lang => lang.lang === 'en') ? 'en' : supportedLanguages[0]?.lang || 'en';
+  
+  // 使用URL中的语言参数，如果没有则使用默认语言
+  const currentLang = params.lang || defaultLang;
+  console.log(params.lang )
   const [textConfig, furnishings] = await Promise.all([
-    globalDataRequest(),       // 获取基础文本数据
-    furnishingsRequest(),    // 获取横图数据
+    globalDataRequest(currentLang),  // 传入当前语言参数
+    furnishingsRequest(),            // 获取横图数据
   ]);
 
   // 合并数据
@@ -78,13 +92,6 @@ export default async function RootLayout({
 
   // 获取当前URL的基础部分（不包含语言代码）
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  // 设置全局支持的语言列表
-  setSupportedLanguages(languages);
-
-  // 获取当前支持的语言列表
-  const supportedLanguages = getSupportedLanguages();
-  // 默认使用英语
-  const defaultLang = supportedLanguages.find(lang => lang.lang === 'en') ? 'en' : supportedLanguages[0]?.lang || 'en';
 
   return (
     <html lang={defaultLang} dir="ltr">

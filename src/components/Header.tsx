@@ -117,7 +117,6 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
 
   // 语言切换处理
   const handleLanguageChange = (langFlag: string) => {
-    
     // 保存语言选择到本地存储
     try {
       if (typeof window !== 'undefined') {
@@ -151,11 +150,15 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
         // 如果当前路径中没有语言代码，添加新的语言代码
         // 修复：确保路径格式正确
         const cleanPath = pathname.startsWith('/') ? pathname : `/${pathname}`;
-        window.location.href = `/${langFlag}${cleanPath === '/' ? '' : cleanPath}` + window.location.search;
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set('lang_refresh', Date.now().toString());
+        window.location.href = `/${langFlag}${cleanPath === '/' ? '' : cleanPath}` + '?' + searchParams.toString();
       }
     } else {
       // 处理极端情况：路径为空或只有根路径
-      window.location.href = `/${langFlag}` + window.location.search;
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.set('lang_refresh', Date.now().toString());
+      window.location.href = `/${langFlag}` + '?' + searchParams.toString();
     }
   };
 
