@@ -56,7 +56,6 @@ export interface GlobalData {
 export interface ContactUs {
   id: number;
   name: string;
-  lang: string;
   link: string;
   isLink: string;
   type: string;

@@ -5,15 +5,21 @@ import Image from 'next/image';
 import {
   HiOutlineMail,
   HiOutlinePhone,
-  HiOutlineLocationMarker,
-  HiOutlineGlobeAlt
+  HiOutlineLocationMarker
 } from 'react-icons/hi';
-import { COMPANY_INFO, SOCIAL_LINKS, BASE_TEXT } from '@/config/constants';
+import {
+  FaFacebook,
+  FaInstagram,
+  FaWhatsapp,
+  FaWeixin
+} from 'react-icons/fa';
+import { BASE_TEXT } from '@/config/constants';
 import { useGlobalData } from '@/context/GlobalContext';
+import { ContactUs } from '@/config/structure'; // 导入ContactUs接口
 
 const Footer: React.FC = () => {
 
-  const { textConfig } = useGlobalData();
+  const { textConfig, contactUs } = useGlobalData();
   const baseInfo = textConfig || BASE_TEXT;
   return (
     <footer className="bg-gray-900 text-white">
@@ -39,19 +45,44 @@ const Footer: React.FC = () => {
               {baseInfo.baseInfo.companyDesc}
             </p>
             <div className="flex space-x-4">
-              {SOCIAL_LINKS.map((social, index) => {
-                const IconComponent = social.icon;
-                return (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    className={`text-gray-400 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1`}
-                    aria-label={social.label}
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <IconComponent className="w-6 h-6" />
-                  </a>
-                );
+              {contactUs && contactUs.map((contact: ContactUs, index: number) => {
+                if (contact.type === 'WhatsApp') {
+                  return (
+                    <a
+                      key={contact.link}
+                      href={contact.link}
+                      className={`text-gray-400 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1`}
+                      aria-label={contact.name}
+                      style={{ animationDelay: `${index * 100}ms` }}>
+                      <FaWhatsapp className='text-2xl'/>
+                    </a>
+                  )
+                }
+                if (contact.type === 'Facebook') {
+                  return (
+                    <a
+                      key={contact.link}
+                      href={contact.link}
+                      className={`text-gray-400 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1`}
+                      aria-label={contact.name}
+                      style={{ animationDelay: `${index * 100}ms` }}>
+                      <FaFacebook className='text-2xl'/>
+                    </a>
+                  );
+                }
+                if (contact.type === 'Instagram') {
+                  return (
+                    <a
+                      key={contact.link}
+                      href={contact.link}
+                      className={`text-gray-400 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1`}
+                      aria-label={contact.name}
+                      style={{ animationDelay: `${index * 100}ms` }}>
+                      <FaInstagram className='text-2xl'/>
+                    </a>
+                  );
+                }
+
               })}
             </div>
           </div>
@@ -59,7 +90,6 @@ const Footer: React.FC = () => {
           {/* 快速链接区域 */}
           <div className="text-center md:text-left">
             <h3 className="text-lg font-semibold mb-4 flex items-center justify-center md:justify-start">
-              <HiOutlineGlobeAlt className="w-5 h-5 mr-2 text-blue-400" />
               {baseInfo.baseInfo.quickLinks}
             </h3>
             <ul className="space-y-3">
@@ -80,18 +110,38 @@ const Footer: React.FC = () => {
           {/* 联系信息区域 */}
           <div className="text-center md:text-left">
             <h3 className="text-lg font-semibold mb-4 flex items-center justify-center md:justify-start">
-              <HiOutlineMail className="w-5 h-5 mr-2 text-blue-400" />
               {baseInfo.baseInfo.contactUs}
             </h3>
             <div className="space-y-3">
-              <div className="flex items-center text-gray-300 group justify-center md:justify-start">
-                <HiOutlineMail className="w-5 h-5 mr-3 text-blue-400 transition-transform duration-200 group-hover:scale-110" />
-                <span className="transition-colors duration-200 group-hover:text-white">{COMPANY_INFO.EMAIL}</span>
-              </div>
-              <div className="flex items-center text-gray-300 group justify-center md:justify-start">
-                <HiOutlinePhone className="w-5 h-5 mr-3 text-blue-400 transition-transform duration-200 group-hover:scale-110" />
-                <span className="transition-colors duration-200 group-hover:text-white">{COMPANY_INFO.PHONE}</span>
-              </div>
+              {/* 根据contactUs数组中的type字段动态渲染不同类型的联系方式 */}
+              {contactUs && contactUs.map((contact: ContactUs) => {
+                // 根据type字段选择对应的图标和内容
+                if (contact.type === 'email') {
+                  return (
+                    <div key={contact.id} className="flex items-center text-gray-300 group justify-center md:justify-start">
+                      <HiOutlineMail className="w-5 h-5 mr-3 text-blue-400 transition-transform duration-200 group-hover:scale-110" />
+                      <span className="transition-colors duration-200 group-hover:text-white">{contact.link}</span>
+                    </div>
+                  );
+                } else if (contact.type === 'phone') {
+                  return (
+                    <div key={contact.id} className="flex items-center text-gray-300 group justify-center md:justify-start">
+                      <HiOutlinePhone className="w-5 h-5 mr-3 text-blue-400 transition-transform duration-200 group-hover:scale-110" />
+                      <span className="transition-colors duration-200 group-hover:text-white">{contact.link}</span>
+                    </div>
+                  );
+                } else if (contact.type === 'WeChat') {
+                  return (
+                    <div key={contact.id} className="flex items-center text-gray-300 group justify-center md:justify-start">
+                      <FaWeixin className="w-5 h-5 mr-3 text-blue-400 transition-transform duration-200 group-hover:scale-110" />
+                      <span className="transition-colors duration-200 group-hover:text-white">{contact.link}</span>
+                    </div>
+                  );
+                }
+                return null; // 如果类型不匹配，则不显示
+              })}
+
+              {/* 显示地址信息 */}
               <div className="flex items-start text-gray-300 group justify-center md:justify-start">
                 <HiOutlineLocationMarker className="w-5 h-5 mr-3 mt-0.5 text-blue-400 transition-transform duration-200 group-hover:scale-110" />
                 <span className="transition-colors duration-200 group-hover:text-white text-center md:text-left">

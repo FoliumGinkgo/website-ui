@@ -276,8 +276,9 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                           src={currentLanguage.id === -1? currentLanguage.logo :getImageUrl(language.logo)}
                           alt={language.name}
                           width={20}
+                          height={20}
                           sizes='20px'
-                          className="object-contain h-auto transition-transform duration-200 group-hover:scale-110"
+                          className="object-contain w-[20px] h-auto transition-transform duration-200 group-hover:scale-110"
                         />
                         <span className="flex-1">{language.name}</span>
                         {currentLang === language.lang && (

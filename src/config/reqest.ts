@@ -53,7 +53,7 @@ export const contactRequest = async () => {
   try {
     const res = await fetch(buildApiUrl(API_ENDPOINTS.CONTACT));
     const data = await res.json();
-    return (data && data.rows) ? data.rows : [];
+    return (data && data.data) ? data.data : [];
   } catch (error) {
     console.error('Error:', error);
     return []; // 返回空对象作为默认值

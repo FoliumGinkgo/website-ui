@@ -79,7 +79,6 @@ export default async function RootLayout({
   // 使用URL中的语言参数，如果没有则使用默认语言
   const { lang } = await params;
   const currentLang = lang || defaultLang;
-  console.log(lang);
 
   const [textConfig, furnishings, contactUs] = await Promise.all([
     globalDataRequest(currentLang),  // 传入当前语言参数
@@ -91,6 +90,7 @@ export default async function RootLayout({
   const globalData = {
     textConfig,
     furnishings,
+    contactUs
   };
 
   // 获取当前URL的基础部分（不包含语言代码）

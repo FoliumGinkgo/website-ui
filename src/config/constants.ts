@@ -1,18 +1,4 @@
-import { Language, MenuItem, SocialLink, TextConfig } from "@/config/structure";
-import {
-  FaFacebook,
-  FaTwitter,
-  FaLinkedin,
-  FaInstagram
-} from 'react-icons/fa';
-// 页面路由
-// export const ROUTES: MenuItem[] = [
-//   { name: 'HOME', href: '/' },
-//   { name: 'ABOUT', href: '/about' },
-//   { name: 'PRODUCTS', href: '/bucket-teeth'},
-//   { name: 'CONTACT', href: '/contact' }
-// ];
-
+import { Language, TextConfig } from "@/config/structure";
 // 默认公司信息
 export const COMPANY_INFO = {
   EMAIL: 'info@xinhang.com',
@@ -53,6 +39,9 @@ export const BASE_TEXT: TextConfig = {
     address: 'Zhangjiang Hi-Tech Park, Pudong New Area, Shanghai, China',
     copyrightInfo: '© Copyright 2023 Xinhang Company. All Rights Reserved.',
   },
+  contactUs: [
+    
+  ]
 };
 // 联系我们提示
 export const CONTACT_US_HINT = {
@@ -74,11 +63,4 @@ export const LANGUAGES: Language[] = [
     sort: 0,
     status: "0"
   }
-];
-
-// 社交媒体链接配置
-export const SOCIAL_LINKS: SocialLink[] = [
-  { icon: FaFacebook, href: '#', label: 'Facebook' },
-  { icon: FaTwitter, href: '#', label: 'Twitter' },
-  { icon: FaInstagram, href: '#', label: 'Instagram' },
 ];
