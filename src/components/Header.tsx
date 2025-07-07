@@ -180,7 +180,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
 
   if (loading) {
     return (
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-999">
+      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-99">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="animate-pulse flex space-x-4">
@@ -195,7 +195,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
 
   return (
     <>
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-999 transition-all duration-300 overflow-x-hidden">
+      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-999 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* Logo区域 */}
@@ -262,9 +262,9 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                   <HiChevronDown className={`w-4 h-4 transition-transform duration-200 ${isMobileLanguageOpen ? 'rotate-180' : ''}`} />
                 </button>
 
-                {/* 移动端语言下拉菜单 */}
+                {/* 移动端语言下拉菜单 - 修改后的代码 */}
                 {isMobileLanguageOpen && (
-                  <div className="fixed right-4 mt-2 w-40 bg-white shadow-lg border border-gray-200 py-2 z-[1000] animate-in slide-in-from-top-2 duration-200 max-h-[40vh] overflow-y-auto">
+                  <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg border border-gray-200 py-2 z-[1000] animate-in slide-in-from-top-2 duration-200 max-h-[40vh] overflow-y-auto">
                     {languages.map((language) => (
                       <button
                         key={language.id}
