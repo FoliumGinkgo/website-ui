@@ -22,8 +22,8 @@ const Footer: React.FC = () => {
   const { textConfig, contactUs } = useGlobalData();
   const baseInfo = textConfig || BASE_TEXT;
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+    <footer className="bg-gray-900 text-white overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-5">
         <div className="grid grid-cols-1 md:grid-cols-2 pb-3 lg:grid-cols-4 gap-8">
           {/* 公司信息区域 */}
           <div className="lg:col-span-2">
@@ -143,8 +143,8 @@ const Footer: React.FC = () => {
 
               {/* 显示地址信息 */}
               <div className="flex items-start text-gray-300 group justify-center md:justify-start">
-                <HiOutlineLocationMarker className="w-5 h-5 mr-3 mt-0.5 text-blue-400 transition-transform duration-200 group-hover:scale-110" />
-                <span className="transition-colors duration-200 group-hover:text-white text-center md:text-left">
+                <HiOutlineLocationMarker className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 text-blue-400 transition-transform duration-200 group-hover:scale-110" />
+                <span className="transition-colors duration-200 group-hover:text-white text-center md:text-left break-words w-full">
                   {baseInfo.baseInfo.address}
                 </span>
               </div>

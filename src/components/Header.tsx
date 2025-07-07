@@ -180,7 +180,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
 
   if (loading) {
     return (
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-999">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="animate-pulse flex space-x-4">
@@ -195,7 +195,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
 
   return (
     <>
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50 transition-all duration-300">
+      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-999 transition-all duration-300 overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* Logo区域 */}
@@ -264,13 +264,12 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
 
                 {/* 移动端语言下拉菜单 */}
                 {isMobileLanguageOpen && (
-                  <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg border border-gray-200 py-2 z-50 animate-in slide-in-from-top-2 duration-200">
+                  <div className="fixed right-4 mt-2 w-40 bg-white shadow-lg border border-gray-200 py-2 z-[1000] animate-in slide-in-from-top-2 duration-200 max-h-[40vh] overflow-y-auto">
                     {languages.map((language) => (
                       <button
                         key={language.id}
                         onClick={() => handleLanguageChange(language.lang)}
-                        className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-100 transition-all duration-200 flex items-center space-x-3 group ${currentLang === language.lang ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
-                          }`}
+                        className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-100 transition-all duration-200 flex items-center space-x-3 group ${currentLang === language.lang ? 'bg-blue-50 text-blue-600' : 'text-gray-700'}`}
                       >
                         <Image
                           src={currentLanguage.id === -1? currentLanguage.logo :getImageUrl(language.logo)}
@@ -310,7 +309,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                 </button>
 
                 {isLanguageDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg border border-gray-200 py-2 z-50 animate-in slide-in-from-top-2 duration-200">
+                  <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg border border-gray-200 py-2 z-999 animate-in slide-in-from-top-2 duration-200">
                     {languages.map((language) => (
                       <button
                         key={language.id}
@@ -360,7 +359,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
 
       {/* 桌面端搜索下拉框 */}
       {isSearchOpen && (
-        <div ref={desktopSearchOverlayRef} className="hidden md:block fixed top-20 left-0 right-0 bg-white shadow-lg border-b border-gray-200 z-40">
+        <div ref={desktopSearchOverlayRef} className="hidden md:block fixed top-20 left-0 right-0 bg-white shadow-lg border-b border-gray-200 z-999">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <form onSubmit={handleSearch} className="flex items-center">
               <div className="relative flex-1">
@@ -381,7 +380,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
 
       {/* 移动端搜索下拉框 */}
       {isMobileSearchOpen && (
-        <div ref={mobileSearchOverlayRef} className="md:hidden fixed top-20 left-0 right-0 bg-white shadow-lg z-40">
+        <div ref={mobileSearchOverlayRef} className="md:hidden fixed top-20 left-0 right-0 bg-white shadow-lg z-999">
           <div className="p-4">
             <form onSubmit={handleSearch} className="flex items-center">
               <div className="relative flex-1">

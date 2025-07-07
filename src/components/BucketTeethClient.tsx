@@ -6,7 +6,7 @@ import { getImageUrl } from "@/utils/imageUtils";
 import { productsRequest } from "@/config/reqest";
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { FaChevronDown, FaChevronRight, FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import { MdKeyboardArrowRight, MdKeyboardArrowDown,MdOutlineChevronLeft , MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 export default function BucketTeethClient({categorys, lang, products: initialProducts}: {categorys: Category[], lang: string, products: ProductData}) {
   const {textConfig, furnishings} = useGlobalData();
@@ -110,9 +110,10 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
         key="prev" 
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-3 py-1 rounded-md border hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border border-gray-200 hover:border-blue-300 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-200 transition-all duration-300"
+        aria-label="上一页"
       >
-        <FaAngleLeft />
+        <MdOutlineChevronLeft className="text-gray-600 text-sm sm:text-base" />
       </button>
     );
     
@@ -122,7 +123,8 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
         <button
           key={i}
           onClick={() => handlePageChange(i)}
-          className={`px-3 py-1 rounded-md border ${currentPage === i ? 'bg-blue-500 text-white' : 'hover:bg-gray-100'}`}
+          className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ${currentPage === i ? 'bg-blue-500 text-white shadow-md hover:bg-blue-600' : 'border border-gray-200 text-gray-700 hover:border-blue-300 hover:bg-blue-50'}`}
+          aria-label={`第${i}页`}
         >
           {i}
         </button>
@@ -135,21 +137,23 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
         key="next" 
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === (totalPages || 1)}
-        className="px-3 py-1 rounded-md border hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 hover:border-blue-300 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-200 transition-all duration-300"
+        aria-label="下一页"
       >
-        <FaAngleRight />
+        <MdOutlineKeyboardArrowRight className="text-gray-600" />
       </button>
     );
     
+    // 修改分页按钮容器，添加响应式间距和溢出处理
     return (
-      <div className="flex justify-center items-center space-x-2 mt-8">
+      <div className="flex justify-center items-center flex-wrap gap-2 xs:gap-3 mt-8 mb-4 px-2">
         {pages}
       </div>
     );
   };
 
   return (
-    <div className='w-full'>
+    <div className='w-full overflow-x-hidden'>
       {/* 顶部横幅区域 - 宽度和屏幕宽度一致的横图高度自适应 */}
       <div className="w-full h-48 sm:h-56 md:h-80 bg-gray-200 flex items-center justify-center relative overflow-hidden">
         {furnishings && furnishings.image ? (
@@ -166,7 +170,7 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
       </div>
 
       {/* 主要内容区域 - 使用container响应式容器宽度 */}
-      <div className="container mx-auto px-4 py-8 md:py-12">
+      <div className="container mx-auto px-2 sm:px-4 py-6 md:py-12">
         <div className="flex flex-col md:flex-row gap-6 md:gap-8">
           {/* 左侧分类列表 - 重新设计边框样式 */}
           <div className="w-full md:w-1/4 lg:w-1/5 bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-all duration-300 ease-in-out">
@@ -193,8 +197,8 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
                     {category.children && category.children.length > 0 && (
                       <span className="transition-transform duration-300 ease-in-out transform">
                         {expandedCategories.includes(category.id) ? 
-                          <FaChevronDown className="text-blue-500" /> : 
-                          <FaChevronRight className="text-gray-500" />
+                          <MdKeyboardArrowDown className="text-blue-500" /> : 
+                          <MdKeyboardArrowRight className="text-gray-500" />
                         }
                       </span>
                     )}
@@ -235,34 +239,49 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
               </div>
             ) : productList.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-7">
                   {productList.map(product => (
-                    <div key={product.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
-                      {/* 产品图片 - 修复alt属性 */}
-                      <div className="relative h-48 sm:h-56 overflow-hidden">
+                    <div key={product.id} className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-100 hover:-translate-y-1">
+                      {/* 产品图片 - 修改为完整显示图片 */}
+                      <div className="relative h-52 sm:h-60 flex items-center justify-center overflow-hidden">
                         {product.images && product.images.length > 0 ? (
-                          <Image
-                            src={getImageUrl(product.images[0])}
-                            alt={`${product.name || '产品'}`}
-                            fill
-                            className="object-cover hover:scale-105 transition-transform duration-300"
-                          />
+                          <div className="relative w-full h-full">
+                            <Image
+                              src={getImageUrl(product.images[0])}
+                              alt={`${product.name || '产品'}`}
+                              fill
+                              className="object-contain p-2 group-hover:scale-105 transition-transform duration-500 ease-in-out"
+                            />
+                            {/* 添加渐变遮罩效果 */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          </div>
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                          <div className="w-full h-full flex items-center justify-center bg-gray-50">
                             <span className="text-gray-400">无图片</span>
                           </div>
                         )}
                       </div>
                       
-                      {/* 产品信息 - 确保name显示 */}
-                      <div className="p-4">
-                        <h3 className="font-medium text-lg mb-2 line-clamp-2 text-gray-800">{product.name}</h3>
-                        <p className="text-sm text-gray-600 line-clamp-3">{product.details}</p>
+                      {/* 产品信息 - 改进样式 */}
+                      <div className="p-3 sm:p-5 relative">
+                        {/* 添加装饰性元素 */}
+                        <div className="absolute top-0 left-0 w-10 h-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-1/2 rounded-full"></div>
+                        <h3 className="font-medium text-lg mb-3 line-clamp-2 text-gray-800 group-hover:text-blue-600 transition-colors duration-300">{product.name}</h3>
+                        <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">{product.details}</p>
+                        {/* 添加查看详情按钮 */}
+                        <div className="mt-4 pt-3 border-t border-gray-100 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-300 -mb-2">
+                          <span className="text-sm text-blue-500 font-medium flex items-center">
+                            查看详情
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
-                {/* 分页控件 - 始终显示 */}
+                {/* 分页控件 - 美化样式 */}
                 {renderPagination()}
               </>
             ) : (

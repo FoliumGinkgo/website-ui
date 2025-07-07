@@ -62,7 +62,7 @@ export const contactRequest = async () => {
 };
 
 //产品接口请求
-export const productsRequest = async (lang: string, pageNum: number = 1, pageSize: number = 6, categoryId?: number) => {
+export const productsRequest = async (lang: string, pageNum: number = 1, pageSize: number = 12, categoryId?: number) => {
   try {
     let url = buildApiUrl(API_ENDPOINTS.PRODUCTS + `?lang=${lang}&pageNum=${pageNum}&pageSize=${pageSize}`);
     if (categoryId) {

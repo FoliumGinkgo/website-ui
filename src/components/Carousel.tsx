@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { getImageUrl } from '@/utils/imageUtils';
-import { BASE_TEXT } from '@/config/constants';
 import { CarouselItem } from '@/config/structure';
 
 
