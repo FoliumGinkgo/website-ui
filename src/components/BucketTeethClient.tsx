@@ -19,7 +19,7 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(initialProducts.total || 0);
-  const pageSize = 6; // 每页显示6个产品
+  const pageSize = 12; // 每页显示12个产品
   
   // 初始化：使用从服务器获取的初始产品数据
   useEffect(() => {
@@ -242,8 +242,8 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-7">
                   {productList.map(product => (
                     <div key={product.id} className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-100 hover:-translate-y-1">
-                      {/* 产品图片 - 修改为完整显示图片 */}
-                      <div className="relative h-52 sm:h-60 flex items-center justify-center overflow-hidden">
+                      {/* 产品图片 - 修改为正方形布局 */}
+                      <div className="relative aspect-square w-full flex items-center justify-center overflow-hidden">
                         {product.images && product.images.length > 0 ? (
                           <div className="relative w-full h-full">
                             <Image
