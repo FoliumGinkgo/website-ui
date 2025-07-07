@@ -37,7 +37,7 @@ export const aboutUsRequest = async (lang: string) => {
     return {name: "About Us", aboutUs: "About Us"}; // 返回空对象作为默认值
   }
 }
-
+//联系人提示接口请求
 export const contactUsHintRequest = async (lang: string) => {
   try {
     const res = await fetch(buildApiUrl(API_ENDPOINTS.CONTACT_US_HINT + `?lang=${lang}`));
@@ -48,7 +48,8 @@ export const contactUsHintRequest = async (lang: string) => {
     return CONTACT_US_HINT; // 返回空对象作为默认值
   }
 }
-//
+
+//联系人接口请求
 export const contactRequest = async () => {
   try {
     const res = await fetch(buildApiUrl(API_ENDPOINTS.CONTACT));
@@ -61,16 +62,31 @@ export const contactRequest = async () => {
 };
 
 //产品接口请求
-export const productsRequest = async () => {
+export const productsRequest = async (lang: string, pageNum: number = 1, pageSize: number = 6, categoryId?: number) => {
   try {
-    const res = await fetch(buildApiUrl(API_ENDPOINTS.PRODUCTS));
+    let url = buildApiUrl(API_ENDPOINTS.PRODUCTS + `?lang=${lang}&pageNum=${pageNum}&pageSize=${pageSize}`);
+    if (categoryId) {
+      url += `&categoryId=${categoryId}`;
+    }
+    const res = await fetch(url);
     const data = await res.json();
-    return (data && data.rows) ? data.rows : [];
+    return data || { rows: [], total: 0 };
+  } catch (error) {
+    console.error('Error:', error);
+    return { rows: [], total: 0 }; // 返回空对象作为默认值
+  }
+};
+//分类接口请求
+export const categoryRequest = async (lang: string) => {
+  try {
+    const res = await fetch(buildApiUrl(API_ENDPOINTS.CATEGORY + `?lang=${lang}`));
+    const data = await res.json();
+    return (data && data.data) ? data.data : [];
   } catch (error) {
     console.error('Error:', error);
     return []; // 返回空对象作为默认值
   }
-};
+}
 
 
 // 全局数据请求

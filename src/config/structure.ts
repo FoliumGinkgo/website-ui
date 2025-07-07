@@ -74,9 +74,31 @@ export interface Furnishings {
 export interface Product {
   id: number;
   categoryId: number;
-  productName: string;
+  name: string;
+  baseId: number;
+  lang: string;
+  slug: string;
+  seoTitle: string;
+  seoDescription: string;
   images: string[];
   details: string;
+}
+
+export interface ProductData {
+  code: number;
+  msg: string;
+  rows: Product[];
+  total: number;
+}
+
+export interface Category {
+  id: number;
+  parentId: number;
+  name: string;
+  lang: string;
+  status: string;
+  delFlag: string;
+  children: Category[];
 }
 
 export interface ContactUsHint {
