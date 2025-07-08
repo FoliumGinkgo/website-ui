@@ -55,6 +55,8 @@ export interface GlobalData {
   [key: string]: any;
   textConfig: TextConfig;
   furnishings: Furnishings;
+  contactUs: ContactUs[];
+  languages: Language[];
 }
 export interface ContactUs {
   id: number;

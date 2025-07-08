@@ -41,5 +41,11 @@ export default async function RootLayout({
   // 使用 URL 中提取的语言参数，如果没有则使用默认语言
   const currentLang = urlLang || defaultLang;
   
-  return children;
+  return (
+    <html lang={currentLang} dir="ltr">
+      <body className={`antialiased min-h-screen flex flex-col`}>
+        {children}
+      </body>
+    </html>
+  );
 }

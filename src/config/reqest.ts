@@ -31,10 +31,10 @@ export const aboutUsRequest = async (lang: string) => {
   try {
     const res = await fetch(buildApiUrl(API_ENDPOINTS.ABOUT_US + `?lang=${lang}`));
     const data = await res.json();
-    return (data && data.data) ? data.data : {name: "About Us", aboutUs: "About Us"} as AboutUs;
+    return (data && data.data) ? data.data : { name: "About Us", aboutUs: "About Us" } as AboutUs;
   } catch (error) {
     console.error('Error:', error);
-    return {name: "About Us", aboutUs: "About Us"}; // 返回空对象作为默认值
+    return { name: "About Us", aboutUs: "About Us" }; // 返回空对象作为默认值
   }
 }
 //联系人提示接口请求
@@ -110,6 +110,19 @@ export const furnishingsRequest = async () => {
     return (data && data.data) ? data.data : {};
   } catch (error) {
     console.error('Error fetching furnishings data:', error);
+    return {}; // 返回空对象作为默认值
+  }
+}
+
+//产品详情接口请求
+export const productDetailRequest = async (slug: string) => {
+  try {
+    console.log(buildApiUrl(API_ENDPOINTS.PRODUCT_DETAIL + `?slug=${slug}`));
+    const res = await fetch(buildApiUrl(API_ENDPOINTS.PRODUCT_DETAIL + `?slug=${slug}`));
+    const data = await res.json();
+    return (data && data.data) ? data.data : {};
+  } catch (error) {
+    console.error('Error fetching product detail data:', error);
     return {}; // 返回空对象作为默认值
   }
 }

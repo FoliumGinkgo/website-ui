@@ -8,7 +8,7 @@ export const API_ENDPOINTS = {
   CAROUSEL: '/website/carousel/carousel',//轮播图
   CONTACT:'/website/contact/getContact',//联系我们
   PRODUCTS: '/website/product/productList',//产品信息列表
-  PRODUCT_DETAIL: '/website/product/',//产品详情
+  PRODUCT_DETAIL: '/website/product/productsInfo',//产品详情
   ABOUT_US: '/website/aboutUs/getAboutUs',//关于我们提示
   CONTACT_US_HINT: '/website/contactUsHint/getContactUsHint',//联系我们输入框提示
   GLOBAL_DATA: '/website/baseInfo/getBaseInfo',//基础信息

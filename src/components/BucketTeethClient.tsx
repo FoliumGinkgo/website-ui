@@ -5,12 +5,13 @@ import { useGlobalData } from "@/context/GlobalContext";
 import { getImageUrl } from "@/utils/imageUtils";
 import { productsRequest } from "@/config/reqest";
 import Image from 'next/image';
+import Link from 'next/link'; // 添加Link导入
 import { useState, useEffect } from 'react';
-import { MdKeyboardArrowRight, MdKeyboardArrowDown,MdOutlineChevronLeft , MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { MdKeyboardArrowRight, MdKeyboardArrowDown, MdOutlineChevronLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
 
-export default function BucketTeethClient({categorys, lang, products: initialProducts}: {categorys: Category[], lang: string, products: ProductData}) {
-  const {textConfig, furnishings} = useGlobalData();
-  
+export default function BucketTeethClient({ categorys, lang, products: initialProducts }: { categorys: Category[], lang: string, products: ProductData }) {
+  const { textConfig, furnishings } = useGlobalData();
+
   // 状态管理
   const [expandedCategories, setExpandedCategories] = useState<number[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
@@ -20,14 +21,14 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(initialProducts.total || 0);
   const pageSize = 12; // 每页显示12个产品
-  
+
   // 初始化：使用从服务器获取的初始产品数据
   useEffect(() => {
     // 使用从props传入的初始产品数据
     setProductList(initialProducts.rows || []);
     setTotalItems(initialProducts.total || 0);
   }, [initialProducts]);
-  
+
   // 获取产品数据
   const fetchProducts = async (categoryId?: number, page: number = 1) => {
     setLoading(true);
@@ -44,16 +45,16 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
       setLoading(false);
     }
   };
-  
+
   // 切换分类展开/折叠
   const toggleCategory = (categoryId: number) => {
-    setExpandedCategories(prev => 
-      prev.includes(categoryId) 
-        ? prev.filter(id => id !== categoryId) 
+    setExpandedCategories(prev =>
+      prev.includes(categoryId)
+        ? prev.filter(id => id !== categoryId)
         : [...prev, categoryId]
     );
   };
-  
+
   // 选择分类
   const selectCategory = (categoryId: number) => {
     // 如果点击当前已选中的分类，则取消选择并显示全部产品
@@ -66,7 +67,7 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
       fetchProducts(categoryId, 1);
     }
   };
-  
+
   // 选择系列（子分类）
   const selectSeries = (categoryId: number, seriesId: number) => {
     // 如果点击当前已选中的系列，则取消选择并显示父分类的产品
@@ -79,35 +80,35 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
       fetchProducts(seriesId, 1);
     }
   };
-  
+
   // 处理分页
   const handlePageChange = (page: number) => {
     const categoryId = selectedSeries || selectedCategory;
     fetchProducts(categoryId ?? undefined, page);
   };
-  
+
   // 计算总页数
   const totalPages = Math.ceil(totalItems / pageSize);
-  
+
   // 生成分页按钮
   const renderPagination = () => {
     // 即使只有一页也显示分页
     const pages = [];
     const maxVisiblePages = 5;
-    
+
     // 确定显示哪些页码
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(totalPages || 1, startPage + maxVisiblePages - 1);
-    
+
     // 调整起始页，确保显示正确数量的页码
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
-    
+
     // 添加上一页按钮
     pages.push(
-      <button 
-        key="prev" 
+      <button
+        key="prev"
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
         className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border border-gray-200 hover:border-blue-300 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-200 transition-all duration-300"
@@ -116,7 +117,7 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
         <MdOutlineChevronLeft className="text-gray-600 text-sm sm:text-base" />
       </button>
     );
-    
+
     // 添加页码按钮
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
@@ -130,11 +131,11 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
         </button>
       );
     }
-    
+
     // 添加下一页按钮
     pages.push(
-      <button 
-        key="next" 
+      <button
+        key="next"
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === (totalPages || 1)}
         className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 hover:border-blue-300 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-200 transition-all duration-300"
@@ -143,7 +144,7 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
         <MdOutlineKeyboardArrowRight className="text-gray-600" />
       </button>
     );
-    
+
     // 修改分页按钮容器，添加响应式间距和溢出处理
     return (
       <div className="flex justify-center items-center flex-wrap gap-2 xs:gap-3 mt-8 mb-4 px-2">
@@ -157,8 +158,8 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
       {/* 顶部横幅区域 - 宽度和屏幕宽度一致的横图高度自适应 */}
       <div className="w-full h-48 sm:h-56 md:h-80 bg-gray-200 flex items-center justify-center relative overflow-hidden">
         {furnishings && furnishings.image ? (
-          <Image 
-            src={getImageUrl(furnishings.image)} 
+          <Image
+            src={getImageUrl(furnishings.image)}
             alt={furnishings.name || "产品中心"}
             fill
             className="object-cover w-full h-full"
@@ -179,10 +180,9 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
               {categorys.map((category, index) => (
                 <div key={category.id} className="relative mb-3 last:mb-0 group">
                   {/* 分类标题 - 修改点击逻辑，只有有children的分类才可以点击 */}
-                  <div 
-                    className={`flex items-center justify-between py-2.5 px-4 rounded-md transition-all duration-300 ease-in-out ${selectedCategory === category.id && !selectedSeries ? 'bg-gradient-to-r from-blue-50 to-white text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-50'} ${
-                      category.children && category.children.length > 0 ? 'cursor-pointer hover:translate-x-1' : ''
-                    }`}
+                  <div
+                    className={`flex items-center justify-between py-2.5 px-4 rounded-md transition-all duration-300 ease-in-out ${selectedCategory === category.id && !selectedSeries ? 'bg-gradient-to-r from-blue-50 to-white text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-50'} ${category.children && category.children.length > 0 ? 'cursor-pointer hover:translate-x-1' : ''
+                      }`}
                     onClick={() => {
                       if (category.children && category.children.length > 0) {
                         toggleCategory(category.id);
@@ -196,19 +196,19 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
                     </span>
                     {category.children && category.children.length > 0 && (
                       <span className="transition-transform duration-300 ease-in-out transform">
-                        {expandedCategories.includes(category.id) ? 
-                          <MdKeyboardArrowDown className="text-blue-500" /> : 
+                        {expandedCategories.includes(category.id) ?
+                          <MdKeyboardArrowDown className="text-blue-500" /> :
                           <MdKeyboardArrowRight className="text-gray-500" />
                         }
                       </span>
                     )}
                   </div>
-                  
+
                   {/* 系列列表（子分类） - 美化样式并添加过渡动画 */}
                   <div className={`overflow-hidden transition-all duration-500 ease-in-out ${expandedCategories.includes(category.id) && category.children && category.children.length > 0 ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
                     <div className="pl-6 mt-1 space-y-1 relative before:absolute before:left-2 before:top-0 before:bottom-0 before:w-px before:bg-gradient-to-b before:from-blue-100 before:to-gray-100">
                       {category.children && category.children.length > 0 && category.children.map(series => (
-                        <div 
+                        <div
                           key={series.id}
                           className={`py-2 px-3 cursor-pointer rounded-md text-sm transition-all duration-300 ease-in-out relative ${selectedSeries === series.id ? 'bg-blue-50 text-blue-700 font-medium' : 'hover:bg-gray-50 text-gray-600 hover:translate-x-1'}`}
                           onClick={() => selectSeries(category.id, series.id)}
@@ -221,7 +221,7 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
                       ))}
                     </div>
                   </div>
-                  
+
                   {/* 分类之间的分隔线 - 使用渐变效果替代实线 */}
                   {index < categorys.length - 1 && (
                     <div className="h-px w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent my-1 opacity-70"></div>
@@ -230,7 +230,7 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
               ))}
             </div>
           </div>
-          
+
           {/* 右侧产品展示 */}
           <div className="w-full md:w-3/4 lg:w-4/5">
             {loading ? (
@@ -241,7 +241,11 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-7">
                   {productList.map(product => (
-                    <div key={product.id} className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-100 hover:-translate-y-1">
+                    <Link
+                      key={product.id}
+                      href={`/${lang}/bucket-teeth/${product.slug}`}
+                      className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-100 hover:-translate-y-1"
+                    >
                       {/* 产品图片 - 修改为正方形布局 */}
                       <div className="relative aspect-square w-full flex items-center justify-center overflow-hidden">
                         {product.images && product.images.length > 0 ? (
@@ -261,7 +265,7 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
                           </div>
                         )}
                       </div>
-                      
+
                       {/* 产品信息 - 改进样式 */}
                       <div className="p-3 sm:p-5 relative">
                         {/* 添加装饰性元素 */}
@@ -278,7 +282,7 @@ export default function BucketTeethClient({categorys, lang, products: initialPro
                           </span>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
                 {/* 分页控件 - 美化样式 */}

@@ -61,7 +61,7 @@ export default async function RootLayout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<{ lang?: string }>;
+  params: { lang?: string }; // 移除Promise
 }>) {
   let languages = await langRequest();
   if (languages.length === 0) {
@@ -77,7 +77,7 @@ export default async function RootLayout({
   const defaultLang = supportedLanguages.find(lang => lang.lang === 'en') ? 'en' : supportedLanguages[0]?.lang || 'en';
 
   // 使用URL中的语言参数，如果没有则使用默认语言
-  const { lang } = await params;
+  const { lang } = await params; // 移除await
   const currentLang = lang || defaultLang;
 
   const [textConfig, furnishings, contactUs] = await Promise.all([
@@ -90,43 +90,24 @@ export default async function RootLayout({
   const globalData = {
     textConfig,
     furnishings,
-    contactUs
+    contactUs,
+    languages  // 添加语言数据到全局数据中
   };
 
   // 获取当前URL的基础部分（不包含语言代码）
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   return (
-    <html lang={defaultLang} dir="ltr">
-      <head>
-        {/* 手动添加hreflang标记，以防Next.js的metadata不能正确处理 */}
-        {supportedLanguages.map(lang => (
-          <link
-            key={lang.lang}
-            rel="alternate"
-            hrefLang={lang.lang}
-            href={`${baseUrl}/${lang.lang}`}
-          />
-        ))}
-        {/* 添加默认语言标记 */}
-        <link
-          rel="alternate"
-          hrefLang="x-default"
-          href={`${baseUrl}/${defaultLang}`}
-        />
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
-        {/* 使用GlobalDataProvider包装children，共享全局数据 */}
-        <GlobalDataProvider value={globalData}>
-          <Header languages={languages} />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </GlobalDataProvider>
-      </body>
-    </html>
+    <>
+      {/* 使用GlobalDataProvider包装children，共享全局数据 */}
+      <GlobalDataProvider value={globalData}>
+        <Header languages={languages} />
+        <main className="flex-1">
+          {children}
+        </main>
+        <Footer />
+      </GlobalDataProvider>
+    </>
   );
 }
 
