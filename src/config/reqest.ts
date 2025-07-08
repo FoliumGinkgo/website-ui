@@ -130,3 +130,15 @@ export const productDetailRequest = async (slug: string, lang: string) => {
     return {}; // 返回空对象作为默认值
   }
 }
+
+//验证码接口请求
+export const captchaImageRequest = async () => {
+  try {
+    const res = await fetch(buildApiUrl(API_ENDPOINTS.CAPTCHA_IMAGE));
+    const data = await res.json();
+    return (data) ? data : {};
+  } catch (error) {
+    console.error('Error fetching captcha image data:', error);
+    return {}; // 返回空对象作为默认值
+  }
+}

@@ -26,7 +26,7 @@ export default async function ProductDetail({ params }: { params: { lang: string
       product = productData;
       
       // 获取相关产品数据 - 使用产品名称进行模糊查询
-      const relatedProductsData = await productsRequest(lang, 1, 4, undefined, product?.name);
+      const relatedProductsData = await productsRequest(lang, 1, 5, undefined, product?.name);
       // 过滤掉当前产品
       relatedProducts = relatedProductsData.rows.filter((item: Product) => item.id !== product?.id).slice(0, 4);
     } else {

@@ -124,3 +124,10 @@ export interface AboutUs {
   lang: string;
   aboutUs: string;
 }
+//验证码
+export interface CaptchaImage{
+  code: number;//状态码
+  img: string;//base64可直接渲染
+  uuid: string;//验证码id，用于校验
+  msg: string;//消息
+}

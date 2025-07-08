@@ -14,6 +14,8 @@ export const API_ENDPOINTS = {
   GLOBAL_DATA: '/website/baseInfo/getBaseInfo',//基础信息
   FURNISHINGS: '/website/furnishings/getFurnishings',//横图地址
   CATEGORY: '/website/category/categoryTree',//产品分类
+  CAPTCHA_IMAGE: '/captchaImage',//验证码图片
+  SUBMIT_CONTACT: '/website/contactUs/addContact',//发送联系方式
 };
 
 // 构建完整API URL的辅助函数
