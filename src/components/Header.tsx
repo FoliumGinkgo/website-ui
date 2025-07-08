@@ -107,13 +107,73 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
   }, [isMobileMenuOpen, isLanguageDropdownOpen, isMobileLanguageOpen, isSearchOpen, isMobileSearchOpen]);
 
   // 搜索处理
+  // 修改搜索处理函数
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      console.log('Search:', searchQuery);
-      // TODO: Implement search logic
+      // 关闭搜索框
+      setIsSearchOpen(false);
+      setIsMobileSearchOpen(false);
+      
+      // 跳转到搜索结果页面
+      window.location.href = `/${currentLang}/search?keyword=${encodeURIComponent(searchQuery.trim())}`;
     }
   };
+  
+  // 修改桌面端搜索下拉框，添加搜索按钮
+  {isSearchOpen && (
+    <div ref={desktopSearchOverlayRef} className="hidden md:block fixed top-20 left-0 right-0 bg-white shadow-lg border-b border-gray-200 z-999">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <form onSubmit={handleSearch} className="flex items-center gap-3">
+          <div className="relative flex-1">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={baseInfo.baseInfo.searchPlaceholder}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-md focus:outline-none transition-all duration-300 text-lg"
+              autoFocus
+            />
+            <HiOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          </div>
+          <button 
+            type="submit" 
+            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md transition-all duration-300 flex items-center gap-2"
+          >
+            <HiOutlineSearch className="w-5 h-5" />
+            <span>搜索</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  )}
+  
+  // 修改移动端搜索下拉框，添加搜索按钮
+  {isMobileSearchOpen && (
+    <div ref={mobileSearchOverlayRef} className="md:hidden fixed top-20 left-0 right-0 bg-white shadow-lg z-999">
+      <div className="p-4">
+        <form onSubmit={handleSearch} className="flex items-center gap-2">
+          <div className="relative flex-1">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={baseInfo.baseInfo.searchPlaceholder}
+              className="w-full pl-8 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none transition-all duration-300 text-base"
+              autoFocus
+            />
+            <HiOutlineSearch className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          </div>
+          <button 
+            type="submit" 
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-md transition-all duration-300"
+          >
+            <HiOutlineSearch className="w-4 h-4" />
+          </button>
+        </form>
+      </div>
+    </div>
+  )}
 
   // 语言切换处理
   const handleLanguageChange = (langFlag: string) => {
@@ -359,7 +419,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
       {isSearchOpen && (
         <div ref={desktopSearchOverlayRef} className="hidden md:block fixed top-20 left-0 right-0 bg-white shadow-lg border-b border-gray-200 z-999">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <form onSubmit={handleSearch} className="flex items-center">
+            <form onSubmit={handleSearch} className="flex items-center gap-3">
               <div className="relative flex-1">
                 <input
                   type="text"
@@ -371,6 +431,12 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                 />
                 <HiOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
+              <button 
+                type="submit" 
+                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md transition-all duration-300 flex items-center gap-2"
+              >
+                <HiOutlineSearch className="w-5 h-5" />
+              </button>
             </form>
           </div>
         </div>
@@ -380,7 +446,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
       {isMobileSearchOpen && (
         <div ref={mobileSearchOverlayRef} className="md:hidden fixed top-20 left-0 right-0 bg-white shadow-lg z-999">
           <div className="p-4">
-            <form onSubmit={handleSearch} className="flex items-center">
+            <form onSubmit={handleSearch} className="flex items-center gap-2">
               <div className="relative flex-1">
                 <input
                   type="text"
@@ -392,6 +458,12 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                 />
                 <HiOutlineSearch className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               </div>
+              <button 
+                type="submit" 
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-md transition-all duration-300 flex items-center justify-center"
+              >
+                <HiOutlineSearch className="w-4 h-4" />
+              </button>
             </form>
           </div>
         </div>

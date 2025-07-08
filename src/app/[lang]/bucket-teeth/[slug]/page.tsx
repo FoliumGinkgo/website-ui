@@ -35,8 +35,6 @@ export default async function ProductDetail({ params }: { params: { lang: string
     }
   } catch (error) {
     console.error('Failed to fetch data:', error);
-    // 临时注释掉错误处理的404重定向
-    // return notFound();
   }
 
   return (

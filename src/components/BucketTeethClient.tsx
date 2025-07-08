@@ -9,9 +9,20 @@ import Link from 'next/link'; // 添加Link导入
 import { useState, useEffect } from 'react';
 import { MdKeyboardArrowRight, MdKeyboardArrowDown, MdOutlineChevronLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
 
-export default function BucketTeethClient({ categorys, lang, products: initialProducts }: { categorys: Category[], lang: string, products: ProductData }) {
+// 修改组件接口，将searchKeyword改为title
+export default function BucketTeethClient({ 
+  categorys, 
+  lang, 
+  products: initialProducts,
+  title
+}: { 
+  categorys: Category[], 
+  lang: string, 
+  products: ProductData,
+  title?: string 
+}) {
   const { textConfig, furnishings } = useGlobalData();
-
+  
   // 状态管理
   const [expandedCategories, setExpandedCategories] = useState<number[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
@@ -22,6 +33,9 @@ export default function BucketTeethClient({ categorys, lang, products: initialPr
   const [totalItems, setTotalItems] = useState<number>(initialProducts.total || 0);
   const pageSize = 12; // 每页显示12个产品
 
+  if(!title) {
+    title = textConfig.baseInfo.productsList;
+  }
   // 初始化：使用从服务器获取的初始产品数据
   useEffect(() => {
     // 使用从props传入的初始产品数据
@@ -58,14 +72,14 @@ export default function BucketTeethClient({ categorys, lang, products: initialPr
   // 选择分类
   const selectCategory = (categoryId: number) => {
     // 如果点击当前已选中的分类，则取消选择并显示全部产品
-    if (selectedCategory === categoryId && !selectedSeries) {
-      setSelectedCategory(null);
-      fetchProducts(undefined, 1);
-    } else {
-      setSelectedCategory(categoryId);
-      setSelectedSeries(null);
-      fetchProducts(categoryId, 1);
-    }
+    // if (selectedCategory === categoryId && !selectedSeries) {
+    //   setSelectedCategory(null);
+    //   fetchProducts(undefined, 1);
+    // } else {
+    //   setSelectedCategory(categoryId);
+    //   setSelectedSeries(null);
+    //   fetchProducts(categoryId, 1);
+    // }
   };
 
   // 选择系列（子分类）
@@ -172,6 +186,7 @@ export default function BucketTeethClient({ categorys, lang, products: initialPr
 
       {/* 主要内容区域 - 使用container响应式容器宽度 */}
       <div className="container mx-auto px-2 sm:px-4 py-6 md:py-12">
+        {/* 现有的分类和产品展示代码保持不变 */}
         <div className="flex flex-col md:flex-row gap-6 md:gap-8">
           {/* 左侧分类列表 - 重新设计边框样式 */}
           <div className="w-full md:w-1/4 lg:w-1/5 bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-all duration-300 ease-in-out">
@@ -233,6 +248,15 @@ export default function BucketTeethClient({ categorys, lang, products: initialPr
 
           {/* 右侧产品展示 */}
           <div className="w-full md:w-3/4 lg:w-4/5">
+            {/* 标题显示区域 */}
+            {title && (
+              <div className="mb-6 p-4 bg-blue-50 rounded-sm border-b-2 border-blue-200">
+                <h2 className="text-lg font-medium text-gray-800">
+                  <span className="text-blue-600">{title}</span>
+                </h2>
+              </div>
+            )}
+            
             {loading ? (
               <div className="flex items-center justify-center h-64 bg-white rounded-lg shadow-sm">
                 <p className="text-gray-500">加载中...</p>
