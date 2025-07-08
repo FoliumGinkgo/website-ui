@@ -254,6 +254,7 @@ export default function BucketTeethClient({ categorys, lang, products: initialPr
                               src={getImageUrl(product.images[0])}
                               alt={`${product.name || '产品'}`}
                               fill
+                              sizes="520"
                               className="object-contain p-2 group-hover:scale-105 transition-transform duration-500 ease-in-out"
                             />
                             {/* 添加渐变遮罩效果 */}

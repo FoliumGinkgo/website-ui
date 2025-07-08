@@ -254,8 +254,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                       alt={currentLanguage.name}
                       width={16}
                       height={16}
-                      sizes='16px'
-                      className="object-contain w-[16px] h-auto"
+                      className="object-contain w-[16px] h-[16px]"
                     />
                   )}
                   <span className="text-xs">{currentLanguage?.name}</span>
@@ -276,8 +275,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                           alt={language.name}
                           width={20}
                           height={20}
-                          sizes='20px'
-                          className="object-contain w-[20px] h-auto transition-transform duration-200 group-hover:scale-110"
+                          className="object-contain w-[20px] h-[20px] transition-transform duration-200 group-hover:scale-110"
                         />
                         <span className="flex-1">{language.name}</span>
                         {currentLang === language.lang && (
@@ -301,7 +299,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                       alt={currentLanguage.name}
                       width={24}
                       height={24}
-                      className="object-contain w-[24px] h-auto"
+                      className="object-contain w-[24px] h-[24px]"
                     />
                   )}
                   <span>{currentLanguage?.name}</span>
@@ -322,7 +320,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                           alt={language.name}
                           width={20}
                           height={20}
-                          className="object-contain h-auto transition-transform duration-200 group-hover:scale-110"
+                          className="object-contain w-[20px] h-[20px] transition-transform duration-200 group-hover:scale-110"
                         />
                         <span className="flex-1">{language.name}</span>
                         {currentLang === language.lang && (
