@@ -244,6 +244,7 @@ export default function BucketTeethClient({ categorys, lang, products: initialPr
                     <Link
                       key={product.id}
                       href={`/${lang}/bucket-teeth/${product.slug}`}
+                      onClick={() => console.log("点击产品链接:", product.slug)}
                       className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-100 hover:-translate-y-1"
                     >
                       {/* 产品图片 - 修改为正方形布局 */}

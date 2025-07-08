@@ -8,7 +8,6 @@ import { notFound } from 'next/navigation';
 export default async function ProductDetail({ params }: { params: { lang: string, slug: string } }) {
   // 从params中获取动态路由参数
   const { lang, slug } = await params;
-
   // 服务器端数据获取
   let categorys: Category[] = [];
   let product: Product | null = null;
@@ -19,8 +18,9 @@ export default async function ProductDetail({ params }: { params: { lang: string
     categorys = categoryData;
     
     // 获取产品详情数据
-    const productData = await productDetailRequest(slug);
-    console.log("产品详情数据:", productData);
+    const productData = await productDetailRequest(slug, lang);
+    
+    // 临时注释掉404重定向，用于调试
     if (productData && productData.id) {
       product = productData;
     } else {
@@ -29,7 +29,8 @@ export default async function ProductDetail({ params }: { params: { lang: string
     }
   } catch (error) {
     console.error('Failed to fetch data:', error);
-    return notFound();
+    // 临时注释掉错误处理的404重定向
+    // return notFound();
   }
 
   return (

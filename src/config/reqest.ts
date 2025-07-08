@@ -115,10 +115,10 @@ export const furnishingsRequest = async () => {
 }
 
 //产品详情接口请求
-export const productDetailRequest = async (slug: string) => {
+export const productDetailRequest = async (slug: string, lang: string) => {
   try {
-    console.log(buildApiUrl(API_ENDPOINTS.PRODUCT_DETAIL + `?slug=${slug}`));
-    const res = await fetch(buildApiUrl(API_ENDPOINTS.PRODUCT_DETAIL + `?slug=${slug}`));
+    const apiUrl = buildApiUrl(API_ENDPOINTS.PRODUCT_DETAIL + `?slug=${slug}&lang=${lang}`);
+    const res = await fetch(apiUrl);
     const data = await res.json();
     return (data && data.data) ? data.data : {};
   } catch (error) {

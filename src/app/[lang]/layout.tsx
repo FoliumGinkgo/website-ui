@@ -77,7 +77,7 @@ export default async function RootLayout({
   const defaultLang = supportedLanguages.find(lang => lang.lang === 'en') ? 'en' : supportedLanguages[0]?.lang || 'en';
 
   // 使用URL中的语言参数，如果没有则使用默认语言
-  const { lang } = await params; // 移除await
+  const { lang } = await params; // 移除 await
   const currentLang = lang || defaultLang;
 
   const [textConfig, furnishings, contactUs] = await Promise.all([
