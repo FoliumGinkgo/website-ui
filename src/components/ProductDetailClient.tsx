@@ -6,11 +6,12 @@ import { getImageUrl } from "@/utils/imageUtils";
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
+import { MdKeyboardArrowRight, MdKeyboardArrowDown, MdArrowBack } from "react-icons/md";
+import { useEffect } from 'react';
+import { productsRequest } from "@/config/reqest";
 
-// 修改第11行
 export default function ProductDetailClient({ categorys, lang, product }: { categorys: Category[], lang: string, product: Product | null }) {
-  // 然后在组件内部添加检查
+  // 组件内部添加检查
   if (!product) {
     return <div>产品不存在</div>;
   }
@@ -21,6 +22,28 @@ export default function ProductDetailClient({ categorys, lang, product }: { cate
   const [expandedCategories, setExpandedCategories] = useState<number[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(product.categoryId);
   const [selectedImage, setSelectedImage] = useState<string>(product.images && product.images.length > 0 ? product.images[0] : '');
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  
+  // 获取相关产品数据
+  useEffect(() => {
+    const fetchRelatedProducts = async () => {
+      if (product && product.categoryId) {
+        try {
+          // 调用产品API，传入产品名称作为参数，限制只返回4个产品
+          const result = await productsRequest(lang, 1, 4, product.categoryId);
+          // 过滤掉当前产品，确保不在相关产品中显示
+          const filteredProducts = result.rows.filter((item: Product) => item.id !== product.id);
+          // 如果过滤后产品少于4个，则保留原有数量
+          setRelatedProducts(filteredProducts.slice(0, 4));
+        } catch (error) {
+          console.error('获取相关产品失败:', error);
+          setRelatedProducts([]);
+        }
+      }
+    };
+    
+    fetchRelatedProducts();
+  }, [product, lang]);
   
   // 切换分类展开/折叠
   const toggleCategory = (categoryId: number) => {
@@ -30,6 +53,7 @@ export default function ProductDetailClient({ categorys, lang, product }: { cate
         : [...prev, categoryId]
     );
   };
+
 
   return (
     <div className='w-full overflow-x-hidden'>
@@ -116,22 +140,32 @@ export default function ProductDetailClient({ categorys, lang, product }: { cate
           
           {/* 右侧产品详情 */}
           <div className="w-full md:w-3/4 lg:w-4/5">
-            <div className="bg-white rounded-xl shadow-sm p-4 md:p-6 lg:p-8">
-              {/* 产品标题 */}
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 pb-4 border-b border-gray-100">{product.name}</h1>
+            <div className="bg-white p-4 md:p-6 lg:p-8">
+              {/* 产品标题和返回按钮 - 重新排列 */}
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 pb-4 border-b border-gray-100">
+                <Link 
+                  href={`/${lang}/bucket-teeth`}
+                  className="text-blue-600 hover:text-blue-800 transition-colors duration-300 mb-3 sm:mb-0 flex items-center"
+                >
+                  <MdArrowBack className="mr-1" />
+                  返回产品列表
+                </Link>
+                <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">{product.name}</h1>
+              </div>
               
               <div className="flex flex-col lg:flex-row gap-8">
-                {/* 左侧产品图片区域 */}
-                <div className="w-full lg:w-2/5">
-                  {/* 主图 */}
-                  <div className="aspect-square bg-gray-50 rounded-lg overflow-hidden mb-4 border border-gray-100">
+                {/* 左侧产品图片区域 - 增大展示空间 */}
+                <div className="w-full lg:w-3/5">
+                  {/* 主图 - 去掉圆角和阴影 */}
+                  <div className="aspect-square bg-white mb-4 border border-gray-100 transition-all duration-300">
                     {selectedImage ? (
                       <div className="relative w-full h-full">
                         <Image
                           src={getImageUrl(selectedImage)}
                           alt={product.name}
                           fill
-                          className="object-contain p-4"
+                          sizes="(max-width: 768px) 100vw, 520px"
+                          className="object-contain p-4 hover:scale-105 transition-transform duration-500 ease-in-out"
                         />
                       </div>
                     ) : (
@@ -141,13 +175,13 @@ export default function ProductDetailClient({ categorys, lang, product }: { cate
                     )}
                   </div>
                   
-                  {/* 缩略图列表 */}
+                  {/* 缩略图列表 - 修改为整体缩放效果 */}
                   {product.images && product.images.length > 1 && (
-                    <div className="grid grid-cols-5 gap-2">
+                    <div className="grid grid-cols-5 gap-3">
                       {product.images.map((img, index) => (
                         <div 
                           key={index} 
-                          className={`aspect-square rounded-md overflow-hidden cursor-pointer border-2 ${selectedImage === img ? 'border-blue-500' : 'border-gray-100'}`}
+                          className={`aspect-square cursor-pointer border-2 ${selectedImage === img ? 'border-blue-500' : 'border-gray-100 hover:border-blue-200'} transition-all duration-300`}
                           onClick={() => setSelectedImage(img)}
                         >
                           <div className="relative w-full h-full">
@@ -155,7 +189,8 @@ export default function ProductDetailClient({ categorys, lang, product }: { cate
                               src={getImageUrl(img)}
                               alt={`${product.name} - 图片 ${index + 1}`}
                               fill
-                              className="object-cover"
+                              sizes="100px"
+                              className="object-contain hover:scale-110 transition-transform duration-300"
                             />
                           </div>
                         </div>
@@ -164,26 +199,65 @@ export default function ProductDetailClient({ categorys, lang, product }: { cate
                   )}
                 </div>
                 
-                {/* 右侧产品详情 */}
-                <div className="w-full lg:w-3/5">
-                  {/* 产品描述 */}
-                  <div className="prose max-w-none">
-                    <div dangerouslySetInnerHTML={{ __html: product.details }} />
-                  </div>
-                  
-                  {/* 返回按钮 */}
-                  <div className="mt-8 pt-4 border-t border-gray-100">
-                    <Link 
-                      href={`/${lang}/bucket-teeth`}
-                      className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                      </svg>
-                      返回产品列表
-                    </Link>
-                  </div>
+                {/* 右侧空白区域 - 原产品详情位置保留空白 */}
+                <div className="w-full lg:w-2/5">
+                  {/* 此处保留空白 */}
                 </div>
+              </div>
+            </div>
+            
+            {/* 产品描述 - 移到相关产品上方 */}
+            <div className="mt-4 bg-white p-4 md:p-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-100 relative after:absolute after:bottom-0 after:left-0 after:w-24 after:h-0.5 after:bg-blue-500">产品描述</h2>
+              <div className="prose max-w-none bg-white">
+                <div dangerouslySetInnerHTML={{ __html: product.details }} />
+              </div>
+            </div>
+            
+            {/* 底部相关产品列表 - 去掉圆角和阴影 */}
+            <div className="mt-8 bg-white p-4 md:p-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-100 relative after:absolute after:bottom-0 after:left-0 after:w-24 after:h-0.5 after:bg-blue-500">相关产品</h2>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {relatedProducts.length > 0 ? (
+                  relatedProducts.map(relatedProduct => (
+                    <Link
+                      key={relatedProduct.id}
+                      href={`/${lang}/bucket-teeth/${relatedProduct.slug}`}
+                      className="group bg-white border border-gray-100 hover:border-blue-100 hover:-translate-y-1 transition-all duration-300"
+                    >
+                      {/* 产品图片 */}
+                      <div className="relative aspect-square w-full flex items-center justify-center">
+                        {relatedProduct.images && relatedProduct.images.length > 0 ? (
+                          <div className="relative w-full h-full">
+                            <Image
+                              src={getImageUrl(relatedProduct.images[0])}
+                              alt={`${relatedProduct.name || '产品'}`}
+                              fill
+                              sizes="520"
+                              className="object-contain p-2 group-hover:scale-105 transition-transform duration-500 ease-in-out"
+                            />
+                            {/* 添加渐变遮罩效果 */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          </div>
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-white">
+                            <span className="text-gray-400">无图片</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 产品信息 */}
+                      <div className="p-3 sm:p-4 relative">
+                        <div className="absolute top-0 left-0 w-10 h-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-1/2"></div>
+                        <h3 className="font-medium text-base mb-2 line-clamp-2 text-gray-800 group-hover:text-blue-600 transition-colors duration-300">{relatedProduct.name}</h3>
+                        <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">{relatedProduct.details}</p>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-8 text-gray-500">暂无相关产品</div>
+                )}
               </div>
             </div>
           </div>

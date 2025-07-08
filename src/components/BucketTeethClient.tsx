@@ -175,7 +175,7 @@ export default function BucketTeethClient({ categorys, lang, products: initialPr
         <div className="flex flex-col md:flex-row gap-6 md:gap-8">
           {/* 左侧分类列表 - 重新设计边框样式 */}
           <div className="w-full md:w-1/4 lg:w-1/5 bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-all duration-300 ease-in-out">
-            <h2 className="text-lg font-semibold mb-6 text-gray-800 relative after:absolute after:bottom-0 after:left-0 after:w-1/3 after:h-0.5 after:bg-blue-500 pb-2">{textConfig.baseInfo.productsList}</h2>
+            <h2 className="text-lg font-semibold mb-6 text-gray-800 relative after:absolute after:bottom-0 after:left-0 after:w-1/3 after:h-0.5 after:bg-blue-500 pb-2">{textConfig.baseInfo.productsCategory}</h2>
             <div className="space-y-1">
               {categorys.map((category, index) => (
                 <div key={category.id} className="relative mb-3 last:mb-0 group">
