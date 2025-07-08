@@ -33,7 +33,6 @@ export interface TextConfig {
   navigationList: MenuItem[];
   baseInfo: {
     aboutUs: string;
-    products: string;
     contactUs: string;
     searchPlaceholder: string;
     companyName: string;
@@ -43,6 +42,10 @@ export interface TextConfig {
     companyDesc: string;
     address: string;
     copyrightInfo: string;
+    productsList: string;
+    productsCategory: string;
+    readMore: string;
+    relatedProducts: string;
   };
   contactUs: ContactUs[];
 }
