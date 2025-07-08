@@ -10,7 +10,17 @@ import { MdKeyboardArrowRight, MdKeyboardArrowDown, MdArrowBack } from "react-ic
 import { useEffect } from 'react';
 import { productsRequest } from "@/config/reqest";
 
-export default function ProductDetailClient({ categorys, lang, product }: { categorys: Category[], lang: string, product: Product | null }) {
+export default function ProductDetailClient({ 
+  categorys, 
+  lang, 
+  product, 
+  relatedProducts = [] 
+}: { 
+  categorys: Category[], 
+  lang: string, 
+  product: Product | null,
+  relatedProducts?: Product[] 
+}) {
   // 组件内部添加检查
   if (!product) {
     return <div>产品不存在</div>;
@@ -22,28 +32,6 @@ export default function ProductDetailClient({ categorys, lang, product }: { cate
   const [expandedCategories, setExpandedCategories] = useState<number[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(product.categoryId);
   const [selectedImage, setSelectedImage] = useState<string>(product.images && product.images.length > 0 ? product.images[0] : '');
-  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
-  
-  // 获取相关产品数据
-  useEffect(() => {
-    const fetchRelatedProducts = async () => {
-      if (product && product.categoryId) {
-        try {
-          // 调用产品API，传入产品名称作为参数，限制只返回4个产品
-          const result = await productsRequest(lang, 1, 4, product.categoryId);
-          // 过滤掉当前产品，确保不在相关产品中显示
-          const filteredProducts = result.rows.filter((item: Product) => item.id !== product.id);
-          // 如果过滤后产品少于4个，则保留原有数量
-          setRelatedProducts(filteredProducts.slice(0, 4));
-        } catch (error) {
-          console.error('获取相关产品失败:', error);
-          setRelatedProducts([]);
-        }
-      }
-    };
-    
-    fetchRelatedProducts();
-  }, [product, lang]);
   
   // 切换分类展开/折叠
   const toggleCategory = (categoryId: number) => {
@@ -54,6 +42,7 @@ export default function ProductDetailClient({ categorys, lang, product }: { cate
     );
   };
 
+  // 移除useEffect部分，因为相关产品现在从服务器端获取
 
   return (
     <div className='w-full overflow-x-hidden'>
