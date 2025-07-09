@@ -27,35 +27,40 @@ export default function BucketTeethClient({
   const [expandedCategories, setExpandedCategories] = useState<number[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [selectedSeries, setSelectedSeries] = useState<number | null>(null);
+  const [showTitle, setShowTitle] = useState<string>('');
   const [productList, setProductList] = useState<Product[]>(initialProducts.rows || []);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(initialProducts.total || 0);
   const pageSize = 12; // 每页显示12个产品
 
-  if(!title) {
-    title = textConfig.baseInfo.productsList;
-  }
-  // 初始化：使用从服务器获取的初始产品数据
+  // 初始化：设置标题和使用从服务器获取的初始产品数据
   useEffect(() => {
+    // 设置初始标题
+    setShowTitle(title || textConfig.baseInfo.productsList);
     // 使用从props传入的初始产品数据
     setProductList(initialProducts.rows || []);
     setTotalItems(initialProducts.total || 0);
-  }, [initialProducts]);
+  }, [initialProducts, title, textConfig.baseInfo.productsList]);
 
   // 获取产品数据
   const fetchProducts = async (categoryId?: number, page: number = 1) => {
     setLoading(true);
     try {
+      // 添加小延迟以便显示骨架屏加载状态
       const data: ProductData = await productsRequest(lang, page, pageSize, categoryId);
-      setProductList(data.rows || []);
-      setTotalItems(data.total || 0);
-      setCurrentPage(page);
+      
+      // 添加最少300ms的延迟，确保骨架屏动画可见
+      setTimeout(() => {
+        setProductList(data.rows || []);
+        setTotalItems(data.total || 0);
+        setCurrentPage(page);
+        setLoading(false);
+      }, 300);
     } catch (error) {
       console.error('Failed to fetch products:', error);
       setProductList([]);
       setTotalItems(0);
-    } finally {
       setLoading(false);
     }
   };
@@ -70,20 +75,27 @@ export default function BucketTeethClient({
   };
 
   // 选择分类
-  const selectCategory = (categoryId: number) => {
+  const selectCategory = (categoryId: number, categoryName?: string) => {
     // 如果点击当前已选中的分类，则取消选择并显示全部产品
-    // if (selectedCategory === categoryId && !selectedSeries) {
-    //   setSelectedCategory(null);
-    //   fetchProducts(undefined, 1);
-    // } else {
-    //   setSelectedCategory(categoryId);
-    //   setSelectedSeries(null);
-    //   fetchProducts(categoryId, 1);
-    // }
+    if (selectedCategory === categoryId && !selectedSeries) {
+      setSelectedCategory(null);
+      setShowTitle(textConfig.baseInfo.productsList); // 重置标题为产品列表
+      fetchProducts(undefined, 1);
+    } else {
+      setSelectedCategory(categoryId);
+      setSelectedSeries(null);
+      if (categoryName) {
+        setShowTitle(categoryName); // 设置标题为分类名称
+      }
+      fetchProducts(categoryId, 1);
+    }
   };
 
   // 选择系列（子分类）
-  const selectSeries = (categoryId: number, seriesId: number) => {
+  const selectSeries = (categoryId: number, seriesId: number, categoryName?: string) => {
+    if(categoryName){
+      setShowTitle(categoryName);
+    }
     // 如果点击当前已选中的系列，则取消选择并显示父分类的产品
     if (selectedSeries === seriesId) {
       setSelectedSeries(null);
@@ -226,7 +238,7 @@ export default function BucketTeethClient({
                         <div
                           key={series.id}
                           className={`py-2 px-3 cursor-pointer rounded-md text-sm transition-all duration-300 ease-in-out relative ${selectedSeries === series.id ? 'bg-blue-50 text-blue-700 font-medium' : 'hover:bg-gray-50 text-gray-600 hover:translate-x-1'}`}
-                          onClick={() => selectSeries(category.id, series.id)}
+                          onClick={() => selectSeries(category.id, series.id, series.name)}
                         >
                           <span className="relative inline-block pl-3">
                             <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full ${selectedSeries === series.id ? 'bg-blue-500' : 'bg-gray-300'}`}></span>
@@ -249,29 +261,54 @@ export default function BucketTeethClient({
           {/* 右侧产品展示 */}
           <div className="w-full md:w-3/4 lg:w-4/5">
             {/* 标题显示区域 */}
-            {title && (
-              <div className="mb-6 p-4 bg-blue-50 rounded-sm border-b-2 border-blue-200">
+            {showTitle && (
+              <div className="mb-6 p-4 rounded-sm border-b-2 border-blue-200">
                 <h2 className="text-lg font-medium text-gray-800">
-                  <span className="text-blue-600">{title}</span>
+                  <span className="text-blue-600">{showTitle}</span>
                 </h2>
               </div>
             )}
             
             {loading ? (
-              <div className="flex items-center justify-center h-64 bg-white rounded-lg shadow-sm">
-                <p className="text-gray-500">加载中...</p>
+              // 骨架屏加载状态
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-7">
+                {Array(6).fill(0).map((_, index) => (
+                  <div key={index} className="bg-white shadow-sm overflow-hidden animate-pulse">
+                    {/* 产品图片骨架 */}
+                    <div className="relative aspect-square w-full bg-gray-200"></div>
+                    
+                    {/* 产品信息骨架 */}
+                    <div className="p-3 sm:p-5">
+                      {/* 标题骨架 */}
+                      <div className="h-6 bg-gray-200 rounded-sm mb-3 w-3/4"></div>
+                      
+                      {/* 描述骨架 - 3行 */}
+                      <div className="space-y-2">
+                        <div className="h-4 bg-gray-200 rounded-sm w-full"></div>
+                        <div className="h-4 bg-gray-200 rounded-sm w-5/6"></div>
+                        <div className="h-4 bg-gray-200 rounded-sm w-4/6"></div>
+                      </div>
+                      
+                      {/* 查看详情按钮骨架 */}
+                      <div className="mt-4 pt-3 border-t border-gray-100 flex justify-end">
+                        <div className="h-5 bg-gray-200 rounded-sm w-20"></div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : productList.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-7">
+                {/* 添加产品列表的过渡动画 */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-7 animate-fadeIn">
                   {productList.map(product => (
                     <Link
                       key={product.id}
                       href={`/${lang}/bucket-teeth/${product.slug}`}
                       onClick={() => console.log("点击产品链接:", product.slug)}
-                      className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-100 hover:-translate-y-1"
+                      className="group bg-white shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-100 hover:-translate-y-1"
                     >
-                      {/* 产品图片 - 修改为正方形布局 */}
+                      {/* 产品图片 - 正方形布局，移除圆角 */}
                       <div className="relative aspect-square w-full flex items-center justify-center overflow-hidden">
                         {product.images && product.images.length > 0 ? (
                           <div className="relative w-full h-full">
@@ -282,8 +319,6 @@ export default function BucketTeethClient({
                               sizes="520"
                               className="object-contain p-2 group-hover:scale-105 transition-transform duration-500 ease-in-out"
                             />
-                            {/* 添加渐变遮罩效果 */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                           </div>
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-gray-50">
@@ -295,16 +330,14 @@ export default function BucketTeethClient({
                       {/* 产品信息 - 改进样式 */}
                       <div className="p-3 sm:p-5 relative">
                         {/* 添加装饰性元素 */}
-                        <div className="absolute top-0 left-0 w-10 h-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-1/2 rounded-full"></div>
+                        <div className="absolute top-0 left-0 w-10 h-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-1/2"></div>
                         <h3 className="font-medium text-lg mb-3 line-clamp-2 text-gray-800 group-hover:text-blue-600 transition-colors duration-300">{product.name}</h3>
-                        <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">{product.details}</p>
-                        {/* 添加查看详情按钮 */}
-                        <div className="mt-4 pt-3 border-t border-gray-100 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-300 -mb-2">
-                          <span className="text-sm text-blue-500 font-medium flex items-center">
-                            查看详情
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
+                        <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">{product.seoDescription}</p>
+                        {/* 查看详情按钮始终显示 */}
+                        <div className="mt-4 pt-3 border-t border-gray-100 flex justify-center">
+                          <span className="text-sm text-blue-500  font-medium flex justify-center items-center">
+                            
+                            <MdOutlineKeyboardArrowRight className="ml-1" />
                           </span>
                         </div>
                       </div>

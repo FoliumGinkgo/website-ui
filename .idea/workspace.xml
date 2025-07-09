@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b294e749-f2e2-4a5c-a0e6-f748da94ad2f" name="更改" comment="refactor(i18n): 更新产品页面国际化文案并增加新文案&#10;&#10;- 将 textConfig.baseInfo.products 改为 textConfig.baseInfo.productsList&#10;- 在 textConfig.baseInfo 中新增 productsCategory、readMore、relatedProducts 等文案- 移除 textConfig.baseInfo 中的 products 字段">
-      <change beforePath="$PROJECT_DIR$/src/app/[lang]/bucket-teeth/[slug]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/[lang]/bucket-teeth/[slug]/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/BucketTeethClient.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/BucketTeethClient.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ProductDetailClient.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProductDetailClient.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/globals.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +29,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "7761bd2d",
+    "git-widget-placeholder": "57978c44",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "E:/Trae/website-ui",
     "node.js.detected.package.eslint": "true",

@@ -23,7 +23,7 @@ export default function ProductDetailClient({
 }) {
   // 组件内部添加检查
   if (!product) {
-    return <div>产品不存在</div>;
+    return <div>404</div>;
   }
   
   const { textConfig, furnishings } = useGlobalData();
