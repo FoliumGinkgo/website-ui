@@ -57,6 +57,7 @@ export interface GlobalData {
   furnishings: Furnishings;
   contactUs: ContactUs[];
   languages: Language[];
+  aboutUs: AboutUs;
 }
 export interface ContactUs {
   id: number;

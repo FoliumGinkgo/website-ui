@@ -10,19 +10,19 @@ import { useState, useEffect } from 'react';
 import { MdKeyboardArrowRight, MdKeyboardArrowDown, MdOutlineChevronLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 // 修改组件接口，将searchKeyword改为title
-export default function BucketTeethClient({ 
-  categorys, 
-  lang, 
+export default function BucketTeethClient({
+  categorys,
+  lang,
   products: initialProducts,
   title
-}: { 
-  categorys: Category[], 
-  lang: string, 
+}: {
+  categorys: Category[],
+  lang: string,
   products: ProductData,
-  title?: string 
+  title?: string
 }) {
   const { textConfig, furnishings } = useGlobalData();
-  
+
   // 状态管理
   const [expandedCategories, setExpandedCategories] = useState<number[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
@@ -49,7 +49,7 @@ export default function BucketTeethClient({
     try {
       // 添加小延迟以便显示骨架屏加载状态
       const data: ProductData = await productsRequest(lang, page, pageSize, categoryId);
-      
+
       // 添加最少300ms的延迟，确保骨架屏动画可见
       setTimeout(() => {
         setProductList(data.rows || []);
@@ -73,6 +73,11 @@ export default function BucketTeethClient({
         : [...prev, categoryId]
     );
   };
+  const stripHtml = (html: string) => {
+    const tmp = document.createElement('DIV');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  };
 
   // 选择分类
   const selectCategory = (categoryId: number, categoryName?: string) => {
@@ -93,7 +98,7 @@ export default function BucketTeethClient({
 
   // 选择系列（子分类）
   const selectSeries = (categoryId: number, seriesId: number, categoryName?: string) => {
-    if(categoryName){
+    if (categoryName) {
       setShowTitle(categoryName);
     }
     // 如果点击当前已选中的系列，则取消选择并显示父分类的产品
@@ -268,7 +273,7 @@ export default function BucketTeethClient({
                 </h2>
               </div>
             )}
-            
+
             {loading ? (
               // 骨架屏加载状态
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-7">
@@ -276,19 +281,19 @@ export default function BucketTeethClient({
                   <div key={index} className="bg-white shadow-sm overflow-hidden animate-pulse">
                     {/* 产品图片骨架 */}
                     <div className="relative aspect-square w-full bg-gray-200"></div>
-                    
+
                     {/* 产品信息骨架 */}
                     <div className="p-3 sm:p-5">
                       {/* 标题骨架 */}
                       <div className="h-6 bg-gray-200 rounded-sm mb-3 w-3/4"></div>
-                      
+
                       {/* 描述骨架 - 3行 */}
                       <div className="space-y-2">
                         <div className="h-4 bg-gray-200 rounded-sm w-full"></div>
                         <div className="h-4 bg-gray-200 rounded-sm w-5/6"></div>
                         <div className="h-4 bg-gray-200 rounded-sm w-4/6"></div>
                       </div>
-                      
+
                       {/* 查看详情按钮骨架 */}
                       <div className="mt-4 pt-3 border-t border-gray-100 flex justify-end">
                         <div className="h-5 bg-gray-200 rounded-sm w-20"></div>
@@ -332,11 +337,19 @@ export default function BucketTeethClient({
                         {/* 添加装饰性元素 */}
                         <div className="absolute top-0 left-0 w-10 h-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-1/2"></div>
                         <h3 className="font-medium text-lg mb-3 line-clamp-2 text-gray-800 group-hover:text-blue-600 transition-colors duration-300">{product.name}</h3>
-                        <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">{product.seoDescription}</p>
+
+                        {/* 修改这里，安全处理可能包含 HTML 的描述 */}
+                        <p className="text-sm text-gray-600 line-clamp-1 leading-relaxed">
+                          {typeof product.seoDescription === 'string' ?
+                            (product.seoDescription.startsWith('<') ?
+                              stripHtml(product.seoDescription) :
+                              product.seoDescription) :
+                            ''}
+                        </p>
+
                         {/* 查看详情按钮始终显示 */}
                         <div className="mt-4 pt-3 border-t border-gray-100 flex justify-center">
-                          <span className="text-sm text-blue-500  font-medium flex justify-center items-center">
-                            
+                          <span className="text-sm text-blue-500 font-medium flex justify-center items-center">
                             <MdOutlineKeyboardArrowRight className="ml-1" />
                           </span>
                         </div>

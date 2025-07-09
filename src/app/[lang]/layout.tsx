@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/globals.css";
-import { langRequest, globalDataRequest, furnishingsRequest, contactRequest } from "@/config/reqest";
+import { langRequest, globalDataRequest, furnishingsRequest, contactRequest, aboutUsRequest } from "@/config/reqest";
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { LANGUAGES } from "@/config/constants";
@@ -80,10 +80,11 @@ export default async function RootLayout({
   const { lang } = await params; // 移除 await
   const currentLang = lang || defaultLang;
 
-  const [textConfig, furnishings, contactUs] = await Promise.all([
+  const [textConfig, furnishings, contactUs, aboutUs] = await Promise.all([
     globalDataRequest(currentLang),  // 传入当前语言参数
     furnishingsRequest(),            // 获取横图数据
     contactRequest(), //联系方式
+    aboutUsRequest(currentLang), //关于我们
   ]);
 
   // 合并数据
@@ -91,7 +92,8 @@ export default async function RootLayout({
     textConfig,
     furnishings,
     contactUs,
-    languages  // 添加语言数据到全局数据中
+    languages, // 添加语言数据到全局数据中
+    aboutUs, // 添加关于我们数据到全局数据中
   };
 
   // 获取当前URL的基础部分（不包含语言代码）

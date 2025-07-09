@@ -51,6 +51,7 @@ const Footer: React.FC = () => {
                     <a
                       key={contact.link}
                       href={contact.link}
+                      target="_blank"
                       className={`text-gray-400 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1`}
                       aria-label={contact.name}
                       style={{ animationDelay: `${index * 100}ms` }}>
@@ -63,6 +64,7 @@ const Footer: React.FC = () => {
                     <a
                       key={contact.link}
                       href={contact.link}
+                      target="_blank"
                       className={`text-gray-400 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1`}
                       aria-label={contact.name}
                       style={{ animationDelay: `${index * 100}ms` }}>
@@ -75,6 +77,7 @@ const Footer: React.FC = () => {
                     <a
                       key={contact.link}
                       href={contact.link}
+                      target="_blank"
                       className={`text-gray-400 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1`}
                       aria-label={contact.name}
                       style={{ animationDelay: `${index * 100}ms` }}>
