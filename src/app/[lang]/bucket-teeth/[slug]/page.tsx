@@ -1,5 +1,5 @@
 import React from 'react';
-import { categoryRequest, productDetailRequest, productsRequest } from '@/config/reqest';
+import { categoryRequest, productDetailRequest, relatedProductsRequest } from '@/config/reqest';
 import { Category, Product } from '@/config/structure';
 import ProductDetailClient from '@/components/ProductDetailClient';
 import { notFound } from 'next/navigation';
@@ -26,9 +26,9 @@ export default async function ProductDetail({ params }: { params: { lang: string
       product = productData;
       
       // 获取相关产品数据 - 使用产品名称进行模糊查询
-      const relatedProductsData = await productsRequest(lang, 1, 5, undefined, product?.name);
+      const relatedProductsData = await relatedProductsRequest(lang, 7, product?.name);
       // 过滤掉当前产品
-      relatedProducts = relatedProductsData.rows.filter((item: Product) => item.id !== product?.id).slice(0, 4);
+      relatedProducts = relatedProductsData.filter((item: Product) => item.id !== product?.id);
     } else {
       // 如果没有找到产品，返回404
       return notFound();

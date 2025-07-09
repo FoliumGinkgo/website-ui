@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { FaPhone, FaWeixin, FaEnvelope, FaUser, FaBuilding, FaComment, FaPaperPlane, FaLock, FaSync, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
+import { FaPhone, FaWeixin, FaEnvelope, FaUser, FaBuilding, FaComment, FaPaperPlane, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 import {
   HiOutlineMail,
   HiOutlineLocationMarker
@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { ContactUs, CaptchaImage } from '@/config/structure';
 import { captchaImageRequest } from '@/config/reqest';
 import { buildApiUrl, API_ENDPOINTS } from '@/config/api';
+import { IoShieldCheckmarkSharp } from 'react-icons/io5';
 
 export default function ContactUsClient({ contactUsHint }: { contactUsHint: any }) {
   const globalData = useGlobalData();
@@ -311,7 +312,7 @@ export default function ContactUsClient({ contactUsHint }: { contactUsHint: any 
               {/* 验证码的输入框 */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaLock className="text-gray-400 text-sm sm:text-base" />
+                  <IoShieldCheckmarkSharp className="text-gray-400 text-sm sm:text-base" />
                 </div>
                 <div className="flex items-center">
                   <input

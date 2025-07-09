@@ -7,8 +7,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { MdKeyboardArrowRight, MdKeyboardArrowDown, MdArrowBack } from "react-icons/md";
-import { useEffect } from 'react';
-import { productsRequest } from "@/config/reqest";
 
 export default function ProductDetailClient({ 
   categorys, 
@@ -207,9 +205,9 @@ export default function ProductDetailClient({
             <div className="mt-8 bg-white p-4 md:p-6">
               <h2 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-100 relative after:absolute after:bottom-0 after:left-0 after:w-24 after:h-0.5 after:bg-blue-500">相关产品</h2>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {relatedProducts.length > 0 ? (
-                  relatedProducts.map(relatedProduct => (
+                  relatedProducts.slice(0, 6).map(relatedProduct => (
                     <Link
                       key={relatedProduct.id}
                       href={`/${lang}/bucket-teeth/${relatedProduct.slug}`}
@@ -240,7 +238,7 @@ export default function ProductDetailClient({
                       <div className="p-3 sm:p-4 relative">
                         <div className="absolute top-0 left-0 w-10 h-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-1/2"></div>
                         <h3 className="font-medium text-base mb-2 line-clamp-2 text-gray-800 group-hover:text-blue-600 transition-colors duration-300">{relatedProduct.name}</h3>
-                        <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">{relatedProduct.details}</p>
+                        <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">{relatedProduct.seoDescription}</p>
                       </div>
                     </Link>
                   ))
