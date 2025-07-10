@@ -1,19 +1,27 @@
 import Carousel from '@/components/Carousel';
-import { carouselRequest } from '@/config/reqest';
+import { carouselRequest, relatedProductsRequest, homeInfoRequest } from '@/config/reqest';
+import HomeClient from '@/components/HomeClient';
 
-export default async function Home() {
-
+export default async function Home({ params }: { params: { lang: string } }) {
+  const lang = params.lang;
   const carouselData = await carouselRequest();
+  
+  // 获取产品列表数据（使用相关产品接口，限制显示6个）
+  const products = await relatedProductsRequest(lang, 6);
+  
+  // 获取分类数据，用于产品跳转
+  const homeInfo = await homeInfoRequest(lang);
   
   return (
     <div className="w-full">
       {/* 轮播图区域 */}
       <Carousel carouselData={carouselData} />
-      
-      {/* 其他首页内容 */}
-      <div className="container mx-auto px-4 py-8">
-        {/* 这里可以添加其他首页内容 */}
-      </div>
+      {/* 使用客户端组件展示首页内容 */}
+      <HomeClient 
+        lang={lang} 
+        products={products} 
+        homeInfo={homeInfo} 
+      />
     </div>
   );
 }

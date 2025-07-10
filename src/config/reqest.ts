@@ -108,6 +108,17 @@ export const categoryRequest = async (lang: string) => {
     return []; // 返回空对象作为默认值
   }
 }
+//首页信息接口请求
+export const homeInfoRequest = async (lang: string) => {
+  try {
+    const res = await fetch(buildApiUrl(API_ENDPOINTS.HOME_INFO + `?lang=${lang}`));
+    const data = await res.json();
+    return (data && data.data) ? data.data : {};
+  } catch (error) {
+    console.error('Error:', error);
+    return {}; // 返回空对象作为默认值
+  }
+}
 
 
 // 全局数据请求

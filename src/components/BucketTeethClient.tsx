@@ -32,6 +32,7 @@ export default function BucketTeethClient({
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(initialProducts.total || 0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false); // 添加移动端菜单状态
   const pageSize = 12; // 每页显示12个产品
 
   // 初始化：设置标题和使用从服务器获取的初始产品数据
@@ -205,9 +206,23 @@ export default function BucketTeethClient({
       <div className="container mx-auto px-2 sm:px-4 py-6 md:py-12">
         {/* 现有的分类和产品展示代码保持不变 */}
         <div className="flex flex-col md:flex-row gap-6 md:gap-8">
-          {/* 左侧分类列表 - 重新设计边框样式 */}
-          <div className="w-full md:w-1/4 lg:w-1/5 bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-all duration-300 ease-in-out">
-            <h2 className="text-lg font-semibold mb-6 text-gray-800 relative after:absolute after:bottom-0 after:left-0 after:w-1/3 after:h-0.5 after:bg-blue-500 pb-2">{textConfig.baseInfo.productsCategory}</h2>
+          {/* 移动端分类切换按钮 - 仅在移动端显示 */}
+          <button 
+            className="md:hidden w-full py-3 px-4 bg-white rounded-lg shadow-sm flex items-center justify-between mb-4"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            <span className="font-medium text-gray-800">{textConfig.baseInfo.productsCategory}</span>
+            <span className="transition-transform duration-300 ease-in-out transform">
+              {mobileMenuOpen ? 
+                <MdKeyboardArrowDown className="text-blue-500" /> : 
+                <MdKeyboardArrowRight className="text-gray-500" />
+              }
+            </span>
+          </button>
+          
+          {/* 左侧分类列表 - 重新设计边框样式，在移动端默认隐藏 */}
+          <div className={`w-full md:w-1/4 lg:w-1/5 bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'max-h-[1000px] opacity-100 mb-6' : 'max-h-0 opacity-0 overflow-hidden md:max-h-[1000px] md:opacity-100 md:overflow-visible'} md:block`}>
+            <h2 className="text-lg font-semibold mb-6 text-gray-800 relative after:absolute after:bottom-0 after:left-0 after:w-1/3 after:h-0.5 after:bg-blue-500 pb-2 md:block">{textConfig.baseInfo.productsCategory}</h2>
             <div className="space-y-1">
               {categorys.map((category, index) => (
                 <div key={category.id} className="relative mb-3 last:mb-0 group">

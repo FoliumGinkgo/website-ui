@@ -59,6 +59,7 @@ export interface GlobalData {
   languages: Language[];
   aboutUs: AboutUs;
 }
+//联系我们
 export interface ContactUs {
   id: number;
   name: string;
@@ -76,7 +77,7 @@ export interface Furnishings {
   status: string;
   delFlag: string;
 }
-
+//产品结构
 export interface Product {
   id: number;
   categoryId: number;
@@ -89,14 +90,14 @@ export interface Product {
   images: string[];
   details: string;
 }
-
+//产品数据结构
 export interface ProductData {
   code: number;
   msg: string;
   rows: Product[];
   total: number;
 }
-
+//分类
 export interface Category {
   id: number;
   parentId: number;
@@ -106,7 +107,7 @@ export interface Category {
   delFlag: string;
   children: Category[];
 }
-
+//联系我们提示
 export interface ContactUsHint {
   id: number;
   name: string;
@@ -118,7 +119,7 @@ export interface ContactUsHint {
   code: string;
   send: string;
 }
-
+//关于我们
 export interface AboutUs {
   id: number;
   name: string;
@@ -131,4 +132,25 @@ export interface CaptchaImage{
   img: string;//base64可直接渲染
   uuid: string;//验证码id，用于校验
   msg: string;//消息
+}
+//公司优势结构
+export interface CompanyAdvantage {
+  logo: string;
+  title: string;
+  description: string;
+}
+
+export interface CategoryImage {
+  categoryId: number;
+  categoryImage: string;
+}
+
+export interface HomeInfo{
+  id?: number;
+  companyAdvantageTitle: string;
+  lang: string;
+  status: string;
+  companyAdvantages: CompanyAdvantage[];
+  categoryImages: CategoryImage[];
+  websiteCategories: Category[];
 }

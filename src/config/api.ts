@@ -17,6 +17,7 @@ export const API_ENDPOINTS = {
   CATEGORY: '/website/category/categoryTree',//产品分类
   CAPTCHA_IMAGE: '/captchaImage',//验证码图片
   SUBMIT_CONTACT: '/website/contactUs/addContact',//发送联系方式
+  HOME_INFO: '/website/homeInfo/getHomeInfo',//首页信息
 };
 
 // 构建完整API URL的辅助函数
