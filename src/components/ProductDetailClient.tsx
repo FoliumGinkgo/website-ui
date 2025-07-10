@@ -295,13 +295,13 @@ export default function ProductDetailClient({
 
             {/* 底部相关产品列表 - 去掉圆角和阴影 */}
             <div className="mt-8 bg-white p-4 md:p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-100 relative after:absolute after:bottom-0 after:left-0 after:w-24 after:h-0.5 after:bg-blue-500">相关产品</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-100 relative after:absolute after:bottom-0 after:left-0 after:w-24 after:h-0.5 after:bg-blue-500">{textConfig.baseInfo.relatedProducts}</h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {relatedProducts.length > 0 ? (
-                  relatedProducts.slice(0, 6).map(relatedProduct => (
+                  relatedProducts.slice(0, 6).map((relatedProduct,index) => (
                     <Link
-                      key={relatedProduct.id}
+                      key={index}
                       href={`/${lang}/bucket-teeth/${relatedProduct.slug}`}
                       className="group bg-white border border-gray-100 hover:border-blue-100 hover:-translate-y-1 transition-all duration-300"
                     >
@@ -335,7 +335,7 @@ export default function ProductDetailClient({
                     </Link>
                   ))
                 ) : (
-                  <div className="col-span-full text-center py-8 text-gray-500">暂无相关产品</div>
+                  <div className="col-span-full text-center py-8 text-gray-500"></div>
                 )}
               </div>
             </div>

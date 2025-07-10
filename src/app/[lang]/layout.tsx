@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 // 动态生成metadata
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang?: string } }): Promise<Metadata> {
   // 获取支持的语言列表
   let languages = await langRequest();
 
@@ -29,6 +29,18 @@ export async function generateMetadata(): Promise<Metadata> {
 
   // 设置全局支持的语言列表
   setSupportedLanguages(languages);
+
+  // 获取当前支持的语言列表
+  const supportedLanguages = getSupportedLanguages();
+  // 默认使用英语
+  const defaultLang = supportedLanguages.find(lang => lang.lang === 'en') ? 'en' : supportedLanguages[0]?.lang || 'en';
+
+  // 使用URL中的语言参数，如果没有则使用默认语言
+  const { lang } = await params;
+  const currentLang = lang || defaultLang;
+
+  // 获取全局数据，包括公司名称和描述
+  const textConfig = await globalDataRequest(currentLang);
 
   // 获取当前URL的基础部分（不包含语言代码）
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -43,12 +55,16 @@ export async function generateMetadata(): Promise<Metadata> {
     languageMap[`x-default`] = `${baseUrl}/en`; // 默认使用英语
   });
 
+  // 使用从后端获取的公司名称和描述
+  const companyName = textConfig.baseInfo?.companyName || "鑫航公司 - 专业工程机械配件制造商 | Xinhang Company - Professional Construction Machinery Parts Manufacturer";
+  const companyDesc = textConfig.baseInfo?.companyDesc || "鑫航公司是专业的工程机械配件制造商，提供高质量的挖掘机斗齿、铲斗等配件产品。Xinhang Company is a professional construction machinery parts manufacturer, providing high-quality excavator bucket teeth, buckets and other parts.";
+
   return {
     title: {
-      default: "鑫航公司 - 专业工程机械配件制造商 | Xinhang Company - Professional Construction Machinery Parts Manufacturer",
-      template: "%s | 鑫航公司 | Xinhang Company"
+      default: companyName,
+      template: `%s | ${companyName}`
     },
-    description: "鑫航公司是专业的工程机械配件制造商，提供高质量的挖掘机斗齿、铲斗等配件产品。Xinhang Company is a professional construction machinery parts manufacturer, providing high-quality excavator bucket teeth, buckets and other parts.",
+    description: companyDesc,
     alternates: {
       canonical: baseUrl,
       languages: alternates,

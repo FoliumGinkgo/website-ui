@@ -409,7 +409,7 @@ export default function BucketTeethClient({
                         {/* 查看详情按钮始终显示，居中 */}
                         <div className="mt-4 pt-3 border-t border-gray-100 flex justify-center">
                           <span className="text-sm text-blue-500 font-medium flex justify-center items-center">
-                            查看详情 <MdOutlineKeyboardArrowRight className="ml-1" />
+                            {textConfig.baseInfo.readMore} <MdOutlineKeyboardArrowRight className="ml-1" />
                           </span>
                         </div>
                       </div>
