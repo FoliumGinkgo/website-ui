@@ -14,3 +14,14 @@ export const getImageUrl = (imagePath: string): string => {
   // 其他情况拼API_BASE_URL
   return `${API_BASE_URL}/${imagePath.replace(/^\/+/, '')}`;
 };
+
+// 处理富文本内容中的图片路径
+export const processHtmlContent = (htmlContent: string) => {
+    if (!htmlContent) return '';
+    
+    // 替换图片的相对路径为完整URL
+    return htmlContent.replace(/(<img[^>]+src=)(["\'])(?!http)([^"']+)(["\'])/gi, (match, p1, p2, p3, p4) => {
+      const fullImageUrl = getImageUrl(p3);
+      return `${p1}${p2}${fullImageUrl}${p4}`;
+    });
+  };

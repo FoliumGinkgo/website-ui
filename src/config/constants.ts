@@ -27,7 +27,7 @@ export const BASE_TEXT: TextConfig = {
   ],
   baseInfo: {
     aboutUs: 'About Us',
-    products: 'Products',
+    productsList: 'Products List',
     contactUs: 'Contact Us',
     searchPlaceholder: 'Search products...',
     companyName: 'Xinhang Company',
@@ -38,6 +38,9 @@ export const BASE_TEXT: TextConfig = {
     companyDesc: "Professional excavator parts manufacturer, committed to providing high-quality products and services to global customers.",
     address: 'Zhangjiang Hi-Tech Park, Pudong New Area, Shanghai, China',
     copyrightInfo: '© Copyright 2023 Xinhang Company. All Rights Reserved.',
+    productsCategory: "Products Category",
+    readMore: "Read More",
+    relatedProducts: "Related Products"
   },
   contactUs: [
     

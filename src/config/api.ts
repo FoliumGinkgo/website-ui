@@ -1,5 +1,5 @@
 // API配置文件
-export const API_BASE_URL = 'http://192.168.3.21/dev-api';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 // export const API_BASE_URL = 'http://47.113.217.170:5555/prod-api';
 
 // API端点

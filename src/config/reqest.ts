@@ -1,5 +1,5 @@
 import { buildApiUrl, API_ENDPOINTS } from "./api";
-import { CONTACT_US_HINT } from "./constants";
+import { CONTACT_US_HINT, BASE_TEXT } from "./constants";
 import { AboutUs } from "./structure";
 
 //语言接口请求
@@ -141,10 +141,10 @@ export const globalDataRequest = async (lang: string) => {
     // 这里先使用一个占位URL，您可以根据实际情况修改
     const res = await fetch(buildApiUrl(API_ENDPOINTS.GLOBAL_DATA + `?lang=${lang}`));
     const data = await res.json();
-    return (data && data.data) ? data.data : {};
+    return (data && data.data) ? data.data : BASE_TEXT;
   } catch (error) {
     console.error('Error fetching global data:', error);
-    return {}; // 返回空对象作为默认值
+    return BASE_TEXT; // 返回空对象作为默认值
   }
 }
 

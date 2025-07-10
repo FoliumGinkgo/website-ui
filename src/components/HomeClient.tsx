@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { getImageUrl } from '@/utils/imageUtils';
+import { getImageUrl, processHtmlContent } from '@/utils/imageUtils';
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { HomeInfo, Product } from '@/config/structure';
 import { useGlobalData } from '@/context/GlobalContext';
@@ -16,18 +16,6 @@ interface HomeClientProps {
 
 export default function HomeClient({ lang, products, homeInfo }: HomeClientProps) {
     const { textConfig, aboutUs } = useGlobalData();
-
-
-    // 处理富文本内容中的图片路径
-    const processHtmlContent = (htmlContent: string) => {
-        if (!htmlContent) return '';
-
-        // 替换图片的相对路径为完整URL
-        return htmlContent.replace(/(<img[^>]+src=)(["\'])(?!http)([^"']+)(["\'])/gi, (match, p1, p2, p3, p4) => {
-            const fullImageUrl = getImageUrl(p3.replace("/dev-api", ""));
-            return `${p1}${p2}${fullImageUrl}${p4}`;
-        });
-    };
 
     return (
         <div className="container mx-auto px-4 py-8 md:py-16">
@@ -83,7 +71,7 @@ export default function HomeClient({ lang, products, homeInfo }: HomeClientProps
                             const categoryImage = homeInfo.categoryImages?.find(
                                 (img) => img.categoryId === category.id
                             );
-                            
+
                             return (
                                 <div key={category.id} className="bg-white shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-100 hover:-translate-y-1">
                                     {/* 分类图片 - 正方形容器 */}
@@ -101,20 +89,20 @@ export default function HomeClient({ lang, products, homeInfo }: HomeClientProps
                                                 <span className="text-gray-400">无图片</span>
                                             </div>
                                         )}
-                                        
+
                                         {/* 顶级分类名称 - 右下角相对定位 */}
                                         <div className="absolute bottom-0 right-0 bg-blue-600/80 text-white px-3 py-1 text-sm font-medium">
                                             {category.name}
                                         </div>
                                     </div>
-                                    
+
                                     {/* 子分类列表 - 固定高度，确保一致性 */}
                                     <div className="p-4 border-t border-gray-100">
                                         <ul className="flex flex-col space-y-2 min-h-[120px]">
                                             {category.children && category.children.length > 0 ? (
                                                 category.children.slice(0, 6).map((child) => (
                                                     <li key={child.id}>
-                                                        <Link 
+                                                        <Link
                                                             href={`/${lang}/bucket-teeth?categoryId=${child.id}`}
                                                             className="text-sm text-gray-700 hover:text-blue-600 transition-colors duration-300 flex items-center"
                                                         >
@@ -125,20 +113,20 @@ export default function HomeClient({ lang, products, homeInfo }: HomeClientProps
                                                 ))
                                             ) : (
                                                 <li>
-                                                    <Link 
+                                                    <Link
                                                         href={`/${lang}/bucket-teeth?categoryId=${category.id}`}
                                                         className="text-sm text-gray-700 hover:text-blue-600 transition-colors duration-300 flex items-center"
                                                     >
                                                         <span className="w-1 h-1 bg-blue-500 rounded-full mr-2"></span>
-                                                        查看产品
+                                                        {textConfig.baseInfo.relatedProducts}
                                                     </Link>
                                                 </li>
                                             )}
                                         </ul>
-                                        
+
                                         {/* 查看更多链接 */}
                                         <div className="mt-3 pt-2 border-t border-gray-100">
-                                            <Link 
+                                            <Link
                                                 href={`/${lang}/bucket-teeth?categoryId=${category.id}`}
                                                 className="text-sm text-blue-600 hover:text-blue-800 transition-colors duration-300 flex items-center justify-end"
                                             >
@@ -152,20 +140,24 @@ export default function HomeClient({ lang, products, homeInfo }: HomeClientProps
                     </div>
                 </div>
             )}
-            
+
             {/* 产品列表 */}
             <div className="mb-16">
-                <div className="flex flex-col items-center mb-8">
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-4">
-                        {textConfig.baseInfo.productsList}
-                    </h2>
-                    <Link
-                        href={`/${lang}/bucket-teeth`}
-                        className="text-blue-600 hover:text-blue-800 transition-colors duration-300 flex items-center"
-                    >
-                        {textConfig.baseInfo.readMore} <MdOutlineKeyboardArrowRight className="ml-1" />
-                    </Link>
-                </div>
+                {
+                    products && products.length > 0 && (
+                        <div className="flex flex-col items-center mb-8">
+                            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-4">
+                                {textConfig.baseInfo.productsList}
+                            </h2>
+                            <Link
+                                href={`/${lang}/bucket-teeth`}
+                                className="text-blue-600 hover:text-blue-800 transition-colors duration-300 flex items-center"
+                            >
+                                {textConfig.baseInfo.readMore} <MdOutlineKeyboardArrowRight className="ml-1" />
+                            </Link>
+                        </div>
+                    )
+                }
 
                 {/* 产品网格 */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fadeIn">
@@ -240,14 +232,14 @@ export default function HomeClient({ lang, products, homeInfo }: HomeClientProps
             )}
 
             {/* 联系我们按钮 */}
-            <div className="flex justify-center mt-8">
+            {/* <div className="flex justify-center mt-8">
                 <Link
                     href={`/${lang}/contact`}
                     className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300 flex items-center"
                 >
                     {textConfig.baseInfo.contactUs} <MdOutlineKeyboardArrowRight className="ml-1" />
                 </Link>
-            </div>
+            </div> */}
         </div>
     );
 }

@@ -2,7 +2,7 @@
 
 import { Category, ContactUs, Product } from "@/config/structure";
 import { useGlobalData } from "@/context/GlobalContext";
-import { getImageUrl } from "@/utils/imageUtils";
+import { getImageUrl, processHtmlContent } from "@/utils/imageUtils";
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -39,17 +39,6 @@ export default function ProductDetailClient({
         ? prev.filter(id => id !== categoryId)
         : [...prev, categoryId]
     );
-  };
-
-  // 处理富文本内容中的图片路径
-  const processHtmlContent = (htmlContent: string) => {
-    if (!htmlContent) return '';
-
-    // 替换图片的相对路径为完整URL
-    return htmlContent.replace(/(<img[^>]+src=)(["\'])(?!http)([^"']+)(["\'])/gi, (match, p1, p2, p3, p4) => {
-      const fullImageUrl = getImageUrl(p3.replace("/dev-api", ""));
-      return `${p1}${p2}${fullImageUrl}${p4}`;
-    });
   };
 
   return (
