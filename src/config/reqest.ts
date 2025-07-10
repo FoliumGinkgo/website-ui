@@ -80,6 +80,20 @@ export const productsRequest = async (lang: string, pageNum: number = 1, pageSiz
     return { rows: [], total: 0 }; // 返回空对象作为默认值
   }
 };
+
+//热门产品接口请求
+export const hotProductsRequest = async (lang: string, pageNum: number = 1, pageSize: number = 6) => {
+  try {
+    let url = buildApiUrl(API_ENDPOINTS.HOT_PRODUCTS + `?lang=${lang}&pageNum=${pageNum}&pageSize=${pageSize}`);
+    const res = await fetch(url);
+    const data = await res.json();
+    return (data && data.data) ? data.data : [];
+  } catch (error) {
+    console.error('Error:', error);
+     return []; // 返回空对象作为默认值
+  }
+};
+
 //相关产品推荐接口请求
 export const relatedProductsRequest = async (lang: string, pageSize: number = 12,  name?: string | undefined) => {
   try {

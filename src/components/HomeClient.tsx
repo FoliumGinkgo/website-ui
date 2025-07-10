@@ -35,16 +35,22 @@ export default function HomeClient({ lang, products, homeInfo }: HomeClientProps
             {homeInfo && (
                 <div className="mb-16">
                     {homeInfo.companyAdvantageTitle && (
-                        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 relative after:absolute after:bottom-0 after:left-0 after:w-1/3 after:h-0.5 after:bg-blue-500 pb-2 mb-8">
-                            {homeInfo.companyAdvantageTitle}
-                        </h2>
-                    )
-                    }
+                        <>
+                            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-4">
+                                {homeInfo.companyAdvantageTitle}
+                            </h2>
+                            {textConfig.baseInfo.companyDesc && (
+                                <p className="text-gray-600 text-center mb-8 max-w-3xl mx-auto">
+                                    {textConfig.baseInfo.companyDesc}
+                                </p>
+                            )}
+                        </>
+                    )}
                     {
                         homeInfo.companyAdvantages && (
-                            <div className={`grid ${homeInfo.companyAdvantages.length === 1 ? 'justify-center' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'} gap-6`}>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
                                 {homeInfo.companyAdvantages.map((advantage, index) => (
-                                    <div key={index} className="bg-white shadow-sm hover:shadow-md transition-all duration-300 p-6 rounded-lg border border-gray-100 hover:border-blue-100 hover:-translate-y-1">
+                                    <div key={index} className="bg-white shadow-sm hover:shadow-md transition-all duration-300 p-6 rounded-lg border border-gray-100 hover:border-blue-100 hover:-translate-y-1 w-full max-w-sm">
                                         {advantage.logo && (
                                             <div className="flex justify-center mb-4">
                                                 <Image
@@ -66,10 +72,91 @@ export default function HomeClient({ lang, products, homeInfo }: HomeClientProps
                 </div>
             )}
             {/* 分类列表 */}
+            {homeInfo && homeInfo.websiteCategories && homeInfo.websiteCategories.length > 0 && (
+                <div className="mb-16">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-8">
+                        {textConfig.baseInfo.productsCategory}
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {homeInfo.websiteCategories.slice(0, 4).map((category) => {
+                            // 查找对应的分类图片
+                            const categoryImage = homeInfo.categoryImages?.find(
+                                (img) => img.categoryId === category.id
+                            );
+                            
+                            return (
+                                <div key={category.id} className="bg-white shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-100 hover:-translate-y-1">
+                                    {/* 分类图片 - 正方形容器 */}
+                                    <div className="relative aspect-square w-full overflow-hidden">
+                                        {categoryImage?.categoryImage ? (
+                                            <Image
+                                                src={getImageUrl(categoryImage.categoryImage)}
+                                                alt={category.name}
+                                                fill
+                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                                                className="object-contain"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                                                <span className="text-gray-400">无图片</span>
+                                            </div>
+                                        )}
+                                        
+                                        {/* 顶级分类名称 - 右下角相对定位 */}
+                                        <div className="absolute bottom-0 right-0 bg-blue-600/80 text-white px-3 py-1 text-sm font-medium">
+                                            {category.name}
+                                        </div>
+                                    </div>
+                                    
+                                    {/* 子分类列表 - 固定高度，确保一致性 */}
+                                    <div className="p-4 border-t border-gray-100">
+                                        <ul className="flex flex-col space-y-2 min-h-[120px]">
+                                            {category.children && category.children.length > 0 ? (
+                                                category.children.slice(0, 6).map((child) => (
+                                                    <li key={child.id}>
+                                                        <Link 
+                                                            href={`/${lang}/bucket-teeth?categoryId=${child.id}`}
+                                                            className="text-sm text-gray-700 hover:text-blue-600 transition-colors duration-300 flex items-center"
+                                                        >
+                                                            <span className="w-1 h-1 bg-blue-500 rounded-full mr-2"></span>
+                                                            {child.name}
+                                                        </Link>
+                                                    </li>
+                                                ))
+                                            ) : (
+                                                <li>
+                                                    <Link 
+                                                        href={`/${lang}/bucket-teeth?categoryId=${category.id}`}
+                                                        className="text-sm text-gray-700 hover:text-blue-600 transition-colors duration-300 flex items-center"
+                                                    >
+                                                        <span className="w-1 h-1 bg-blue-500 rounded-full mr-2"></span>
+                                                        查看产品
+                                                    </Link>
+                                                </li>
+                                            )}
+                                        </ul>
+                                        
+                                        {/* 查看更多链接 */}
+                                        <div className="mt-3 pt-2 border-t border-gray-100">
+                                            <Link 
+                                                href={`/${lang}/bucket-teeth?categoryId=${category.id}`}
+                                                className="text-sm text-blue-600 hover:text-blue-800 transition-colors duration-300 flex items-center justify-end"
+                                            >
+                                                {textConfig.baseInfo.readMore} <MdOutlineKeyboardArrowRight className="ml-1" />
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+            
             {/* 产品列表 */}
             <div className="mb-16">
-                <div className="flex justify-between items-center mb-8">
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-800 relative after:absolute after:bottom-0 after:left-0 after:w-1/3 after:h-0.5 after:bg-blue-500 pb-2">
+                <div className="flex flex-col items-center mb-8">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-4">
                         {textConfig.baseInfo.productsList}
                     </h2>
                     <Link
@@ -134,8 +221,8 @@ export default function HomeClient({ lang, products, homeInfo }: HomeClientProps
             {/* 关于我们内容 - 使用客户端组件获取全局数据 */}
             {aboutUs && aboutUs.aboutUs && (
                 <div className="bg-white rounded-lg p-6 md:p-8 transition-all duration-300">
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 relative after:absolute after:bottom-0 after:left-0 after:w-1/3 after:h-0.5 after:bg-blue-500 pb-2">
+                    <div className="flex justify-center items-center mb-6">
+                        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center">
                             {aboutUs.name}
                         </h2>
                     </div>

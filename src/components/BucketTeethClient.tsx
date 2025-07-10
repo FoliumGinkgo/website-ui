@@ -5,9 +5,10 @@ import { useGlobalData } from "@/context/GlobalContext";
 import { getImageUrl } from "@/utils/imageUtils";
 import { productsRequest } from "@/config/reqest";
 import Image from 'next/image';
-import Link from 'next/link'; // 添加Link导入
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { MdKeyboardArrowRight, MdKeyboardArrowDown, MdOutlineChevronLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { useRouter, useSearchParams } from 'next/navigation';
 
 // 修改组件接口，将searchKeyword改为title
 export default function BucketTeethClient({
@@ -22,6 +23,8 @@ export default function BucketTeethClient({
   title?: string
 }) {
   const { textConfig, furnishings } = useGlobalData();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   // 状态管理
   const [expandedCategories, setExpandedCategories] = useState<number[]>([]);
@@ -32,7 +35,7 @@ export default function BucketTeethClient({
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(initialProducts.total || 0);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false); // 添加移动端菜单状态
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const pageSize = 12; // 每页显示12个产品
 
   // 初始化：设置标题和使用从服务器获取的初始产品数据
@@ -42,7 +45,39 @@ export default function BucketTeethClient({
     // 使用从props传入的初始产品数据
     setProductList(initialProducts.rows || []);
     setTotalItems(initialProducts.total || 0);
-  }, [initialProducts, title, textConfig.baseInfo.productsList]);
+    
+    // 从URL参数中获取分类ID
+    const categoryId = searchParams.get('categoryId');
+    if (categoryId) {
+      const catId = parseInt(categoryId);
+      
+      // 查找是否为顶级分类
+      const topCategory = categorys.find(cat => cat.id === catId);
+      if (topCategory) {
+        setSelectedCategory(catId);
+        setShowTitle(topCategory.name);
+        setExpandedCategories(prev => [...prev, catId]);
+        fetchProducts(catId, 1);
+      } else {
+        // 查找是否为子分类
+        let foundParent = false;
+        for (const cat of categorys) {
+          if (cat.children) {
+            const childCat = cat.children.find(child => child.id === catId);
+            if (childCat) {
+              setSelectedCategory(cat.id);
+              setSelectedSeries(catId);
+              setShowTitle(childCat.name);
+              setExpandedCategories(prev => [...prev, cat.id]);
+              fetchProducts(catId, 1);
+              foundParent = true;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }, [initialProducts, title, textConfig.baseInfo.productsList, searchParams, categorys]);
 
   // 获取产品数据
   const fetchProducts = async (categoryId?: number, page: number = 1) => {
@@ -74,6 +109,7 @@ export default function BucketTeethClient({
         : [...prev, categoryId]
     );
   };
+  
   const stripHtml = (html: string) => {
     const tmp = document.createElement('DIV');
     tmp.innerHTML = html;
@@ -87,6 +123,8 @@ export default function BucketTeethClient({
       setSelectedCategory(null);
       setShowTitle(textConfig.baseInfo.productsList); // 重置标题为产品列表
       fetchProducts(undefined, 1);
+      // 更新URL，移除categoryId参数
+      router.push(`/${lang}/bucket-teeth`);
     } else {
       setSelectedCategory(categoryId);
       setSelectedSeries(null);
@@ -94,6 +132,8 @@ export default function BucketTeethClient({
         setShowTitle(categoryName); // 设置标题为分类名称
       }
       fetchProducts(categoryId, 1);
+      // 更新URL，添加categoryId参数
+      router.push(`/${lang}/bucket-teeth?categoryId=${categoryId}`);
     }
   };
 
@@ -106,10 +146,14 @@ export default function BucketTeethClient({
     if (selectedSeries === seriesId) {
       setSelectedSeries(null);
       fetchProducts(categoryId, 1);
+      // 更新URL，使用父分类ID
+      router.push(`/${lang}/bucket-teeth?categoryId=${categoryId}`);
     } else {
       setSelectedCategory(categoryId);
       setSelectedSeries(seriesId);
       fetchProducts(seriesId, 1);
+      // 更新URL，使用子分类ID
+      router.push(`/${lang}/bucket-teeth?categoryId=${seriesId}`);
     }
   };
 
@@ -222,7 +266,7 @@ export default function BucketTeethClient({
           
           {/* 左侧分类列表 - 重新设计边框样式，在移动端默认隐藏 */}
           <div className={`w-full md:w-1/4 lg:w-1/5 bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'max-h-[1000px] opacity-100 mb-6' : 'max-h-0 opacity-0 overflow-hidden md:max-h-[1000px] md:opacity-100 md:overflow-visible'} md:block`}>
-            <h2 className="text-lg font-semibold mb-6 text-gray-800 relative after:absolute after:bottom-0 after:left-0 after:w-1/3 after:h-0.5 after:bg-blue-500 pb-2 md:block">{textConfig.baseInfo.productsCategory}</h2>
+            <h2 className="text-lg font-semibold mb-6 text-gray-800 relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1/3 after:h-0.5 after:bg-blue-500 pb-2 text-center">{textConfig.baseInfo.productsCategory}</h2>
             <div className="space-y-1">
               {categorys.map((category, index) => (
                 <div key={category.id} className="relative mb-3 last:mb-0 group">
@@ -233,7 +277,7 @@ export default function BucketTeethClient({
                     onClick={() => {
                       if (category.children && category.children.length > 0) {
                         toggleCategory(category.id);
-                        selectCategory(category.id);
+                        selectCategory(category.id, category.name);
                       }
                     }}
                   >
@@ -280,9 +324,9 @@ export default function BucketTeethClient({
 
           {/* 右侧产品展示 */}
           <div className="w-full md:w-3/4 lg:w-4/5">
-            {/* 标题显示区域 */}
+            {/* 标题显示区域 - 修改为居中显示 */}
             {showTitle && (
-              <div className="mb-6 p-4 rounded-sm border-b-2 border-blue-200">
+              <div className="mb-6 p-4 rounded-sm border-b-2 border-blue-200 text-center">
                 <h2 className="text-lg font-medium text-gray-800">
                   <span className="text-blue-600">{showTitle}</span>
                 </h2>
@@ -300,17 +344,17 @@ export default function BucketTeethClient({
                     {/* 产品信息骨架 */}
                     <div className="p-3 sm:p-5">
                       {/* 标题骨架 */}
-                      <div className="h-6 bg-gray-200 rounded-sm mb-3 w-3/4"></div>
+                      <div className="h-6 bg-gray-200 rounded-sm mb-3 w-3/4 mx-auto"></div>
 
                       {/* 描述骨架 - 3行 */}
                       <div className="space-y-2">
                         <div className="h-4 bg-gray-200 rounded-sm w-full"></div>
-                        <div className="h-4 bg-gray-200 rounded-sm w-5/6"></div>
-                        <div className="h-4 bg-gray-200 rounded-sm w-4/6"></div>
+                        <div className="h-4 bg-gray-200 rounded-sm w-5/6 mx-auto"></div>
+                        <div className="h-4 bg-gray-200 rounded-sm w-4/6 mx-auto"></div>
                       </div>
 
                       {/* 查看详情按钮骨架 */}
-                      <div className="mt-4 pt-3 border-t border-gray-100 flex justify-end">
+                      <div className="mt-4 pt-3 border-t border-gray-100 flex justify-center">
                         <div className="h-5 bg-gray-200 rounded-sm w-20"></div>
                       </div>
                     </div>
@@ -347,14 +391,14 @@ export default function BucketTeethClient({
                         )}
                       </div>
 
-                      {/* 产品信息 - 改进样式 */}
+                      {/* 产品信息 - 改进样式，标题居中 */}
                       <div className="p-3 sm:p-5 relative">
                         {/* 添加装饰性元素 */}
-                        <div className="absolute top-0 left-0 w-10 h-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-1/2"></div>
-                        <h3 className="font-medium text-lg mb-3 line-clamp-2 text-gray-800 group-hover:text-blue-600 transition-colors duration-300">{product.name}</h3>
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-1/2"></div>
+                        <h3 className="font-medium text-lg mb-3 line-clamp-2 text-gray-800 group-hover:text-blue-600 transition-colors duration-300 text-center">{product.name}</h3>
 
-                        {/* 修改这里，安全处理可能包含 HTML 的描述 */}
-                        <p className="text-sm text-gray-600 line-clamp-1 leading-relaxed">
+                        {/* 修改这里，安全处理可能包含 HTML 的描述，并居中显示 */}
+                        <p className="text-sm text-gray-600 line-clamp-1 leading-relaxed text-center">
                           {typeof product.seoDescription === 'string' ?
                             (product.seoDescription.startsWith('<') ?
                               stripHtml(product.seoDescription) :
@@ -362,10 +406,10 @@ export default function BucketTeethClient({
                             ''}
                         </p>
 
-                        {/* 查看详情按钮始终显示 */}
+                        {/* 查看详情按钮始终显示，居中 */}
                         <div className="mt-4 pt-3 border-t border-gray-100 flex justify-center">
                           <span className="text-sm text-blue-500 font-medium flex justify-center items-center">
-                            <MdOutlineKeyboardArrowRight className="ml-1" />
+                            查看详情 <MdOutlineKeyboardArrowRight className="ml-1" />
                           </span>
                         </div>
                       </div>
