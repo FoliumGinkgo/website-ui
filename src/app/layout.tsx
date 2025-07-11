@@ -1,6 +1,6 @@
 import { LANGUAGES } from "@/config/constants";
 import { getSupportedLanguages, setSupportedLanguages } from "@/config/languageConfig";
-import { langRequest } from "@/config/reqest";
+import { langRequest } from "@/config/request";
 import type { Metadata } from "next";
 import { headers } from 'next/headers';
 

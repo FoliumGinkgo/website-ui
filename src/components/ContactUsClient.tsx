@@ -10,7 +10,7 @@ import { useGlobalData } from '@/context/GlobalContext';
 import { getImageUrl } from '@/utils/imageUtils';
 import Image from 'next/image';
 import { ContactUs, CaptchaImage } from '@/config/structure';
-import { captchaImageRequest } from '@/config/reqest';
+import { captchaImageRequest } from '@/config/request';
 import { buildApiUrl, API_ENDPOINTS } from '@/config/api';
 import { IoShieldCheckmarkSharp } from 'react-icons/io5';
 

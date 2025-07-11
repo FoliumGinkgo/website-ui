@@ -3,7 +3,7 @@
 import { Category, Product, ProductData } from "@/config/structure";
 import { useGlobalData } from "@/context/GlobalContext";
 import { getImageUrl } from "@/utils/imageUtils";
-import { productsRequest } from "@/config/reqest";
+import { productsRequest } from "@/config/request";
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';

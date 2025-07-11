@@ -1,5 +1,5 @@
 import React from 'react';
-import { categoryRequest, productsRequest } from '@/config/reqest';
+import { categoryRequest, productsRequest } from '@/config/request';
 import { Category, ProductData } from '@/config/structure';
 import BucketTeethClient from '@/components/BucketTeethClient';
 

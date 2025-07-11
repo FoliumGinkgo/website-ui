@@ -1,16 +1,17 @@
 import React from 'react';
-import { categoryRequest, productDetailRequest, relatedProductsRequest } from '@/config/reqest';
+import { categoryRequest, productDetailRequest, relatedProductsRequest } from '@/config/request';
 import { Category, Product } from '@/config/structure';
 import ProductDetailClient from '@/components/ProductDetailClient';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { langRequest } from '@/config/reqest';
+import { langRequest } from '@/config/request';
 import { LANGUAGES } from '@/config/constants';
 import { setSupportedLanguages, getSupportedLanguages } from '@/config/languageConfig';
 
 // 动态生成产品详情页的元数据
-export async function generateMetadata({ params }: { params: { lang: string, slug: string } }): Promise<Metadata> {
-  const { lang, slug } = await params;
+export async function generateMetadata({ params }: { params: { lang: string, slug: string } }): Promise<Metadata>
+{
+  const { lang, slug } = params;
   
   // 获取支持的语言列表
   let languages = await langRequest();
@@ -76,7 +77,7 @@ export async function generateMetadata({ params }: { params: { lang: string, slu
 // 在App Router中，页面组件默认是服务器组件，可以直接获取数据
 export default async function ProductDetail({ params }: { params: { lang: string, slug: string } }) {
   // 从params中获取动态路由参数
-  const { lang, slug } = await params;
+  const { lang, slug } = params;
   // 服务器端数据获取
   let categorys: Category[] = [];
   let product: Product | null = null;

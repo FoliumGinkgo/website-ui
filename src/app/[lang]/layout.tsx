@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/globals.css";
-import { langRequest, globalDataRequest, furnishingsRequest, contactRequest, aboutUsRequest } from "@/config/reqest";
+import { langRequest, globalDataRequest, furnishingsRequest, contactRequest, aboutUsRequest } from "@/config/request";
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { LANGUAGES } from "@/config/constants";
@@ -93,7 +93,7 @@ export default async function RootLayout({
   const defaultLang = supportedLanguages.find(lang => lang.lang === 'en') ? 'en' : supportedLanguages[0]?.lang || 'en';
 
   // 使用URL中的语言参数，如果没有则使用默认语言
-  const { lang } = await params; // 移除 await
+  const { lang } = params; // 移除 await
   const currentLang = lang || defaultLang;
 
   const [textConfig, furnishings, contactUs, aboutUs] = await Promise.all([

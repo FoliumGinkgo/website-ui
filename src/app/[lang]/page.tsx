@@ -1,9 +1,9 @@
 import Carousel from '@/components/Carousel';
-import { carouselRequest, hotProductsRequest, homeInfoRequest } from '@/config/reqest';
+import { carouselRequest, hotProductsRequest, homeInfoRequest } from '@/config/request';
 import HomeClient from '@/components/HomeClient';
 
 export default async function Home({ params }: { params: { lang: string } }) {
-  const lang = await params.lang;
+  const lang = params.lang;
   const carouselData = await carouselRequest();
   
   // 获取产品列表数据（使用相关产品接口，限制显示6个）
