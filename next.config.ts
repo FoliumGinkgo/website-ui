@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     unoptimized: true,
     remotePatterns: [
       {
-        protocol: 'http',
+        protocol: process.env.NODE_ENV === "development" ? "http" : "https",
         hostname: '47.113.217.170', // 这里必须是字符串，不能写成 process.env.***
         port: '5555',
         // pathname: '/prod-api/**', // 可选，根据你的图片路径匹配
