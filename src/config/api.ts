@@ -23,5 +23,6 @@ export const API_ENDPOINTS = {
 
 // 构建完整API URL的辅助函数
 export const buildApiUrl = (endpoint: string): string => {
-  return `${API_BASE_URL}${endpoint}`;
+  // 去掉前后可能出现的 "/"
+  return `${API_BASE_URL?.replace(/\/+$/, '') || ''}/${endpoint.replace(/^\/+/, '')}`;
 };
