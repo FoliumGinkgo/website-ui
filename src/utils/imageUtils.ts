@@ -12,7 +12,7 @@ export const getImageUrl = (imagePath: string): string => {
   }
 
   // 其他情况拼API_BASE_URL
-  return `${API_BASE_URL}/${imagePath.replace(/^\/+/, '')}`;
+  return `${API_BASE_URL?.replace(/\/+$/, '') || ''}/${imagePath.replace(/^\/+/, '')}`;
 };
 
 // 处理富文本内容中的图片路径
