@@ -8,8 +8,7 @@
   "build": "next build",
   "start": "next start",
   "lint": "next lint",
-  "postbuild": "next-sitemap --config next-sitemap.config.cjs",
-  "export": "next build && next export"
+  "postbuild": "next-sitemap --config next-sitemap.config.cjs"
 },
   "dependencies": {
     "next": "15.3.4",
