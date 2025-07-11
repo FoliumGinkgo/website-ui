@@ -1,19 +1,17 @@
 import type { NextConfig } from "next";
 
 // next.config.js
-const nextConfig = {
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: process.env.NEXT_PUBLIC_BASE_IP, //'', // 替换为你的服务器 IP 或域名
-        port: '5555',                // 如果使用了端口
-        // pathname: '/dev-api/**',   // 匹配你的图片路径
-        // pathname: '/prod-api/**',
+        hostname: '47.113.217.170', // 这里必须是字符串，不能写成 process.env.***
+        port: '5555',
+        // pathname: '/prod-api/**', // 可选，根据你的图片路径匹配
       },
     ],
   },
-  // 移除i18n配置，因为它与App Router不兼容
 };
 
 export default nextConfig;
