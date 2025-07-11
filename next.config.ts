@@ -2,7 +2,9 @@ import type { NextConfig } from "next";
 
 // next.config.js
 const nextConfig: NextConfig = {
+  output: 'export',
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'http',
