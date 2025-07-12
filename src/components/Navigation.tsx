@@ -1,6 +1,13 @@
+// ✅ components/Navigation.tsx
 import React from 'react';
 import Link from 'next/link';
-import {MenuItem} from '@/config/structure';
+import { MenuItem } from '@/config/structure';
+import { getSupportedLocaleCodes } from '@/config/languageConfig';
+
+function safeLang(lang: string): string {
+  const supported = getSupportedLocaleCodes();
+  return supported.includes(lang) ? lang : 'en';
+}
 
 interface NavigationProps {
   items: MenuItem[];
@@ -10,23 +17,22 @@ interface NavigationProps {
   lang: string;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ 
-  items, 
-  mobile = false, 
-  onItemClick,
-  className = '',
-  lang = 'en'
-}) => {
+const Navigation: React.FC<NavigationProps> = ({ items, mobile = false, onItemClick, className = '', lang = 'en' }) => {
+  const currentLang = safeLang(lang);
+  const buildHref = (rawHref: string) => {
+    const cleaned = rawHref.replace(/^\/?(en|zh)(\/|$)/, '/');
+    return `/${currentLang}${cleaned}`;
+  };
+
   if (mobile) {
     return (
       <div className={`px-10 pt-2 pb-3 space-y-1 ${className}`}>
         {items.map((item, index) => (
           <Link
             key={index}
-            href={`/${lang}${item.href}`}
+            href={buildHref(item.href)}
             className="block px-3 py-2.5 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 transform hover:translate-x-1 text-center"
             onClick={onItemClick}
-            style={{ animationDelay: `${index * 50}ms` }}
           >
             {item.name}
           </Link>
@@ -40,7 +46,7 @@ const Navigation: React.FC<NavigationProps> = ({
       {items.map((item, index) => (
         <Link
           key={index}
-          href={`/${lang}${item.href}`}
+          href={buildHref(item.href)}
           className="text-gray-700 hover:text-blue-600 px-4 py-2 text-sm font-medium transition-all duration-200 relative group rounded-lg hover:bg-blue-50"
         >
           {item.name}

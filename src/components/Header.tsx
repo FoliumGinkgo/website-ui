@@ -181,42 +181,42 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
 
   // 语言切换处理
   const handleLanguageChange = (langFlag: string) => {
-  try {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(LANGUAGE_STORAGE_KEY, langFlag);
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, langFlag);
+      }
+    } catch (error) {
+      console.error('无法保存语言设置到本地存储:', error);
     }
-  } catch (error) {
-    console.error('无法保存语言设置到本地存储:', error);
-  }
 
-  setCurrentLang(langFlag);
-  setIsLanguageDropdownOpen(false);
-  setIsMobileLanguageOpen(false);
+    setCurrentLang(langFlag);
+    setIsLanguageDropdownOpen(false);
+    setIsMobileLanguageOpen(false);
 
-  const pathname = window.location.pathname;
-  const search = window.location.search;
+    const pathname = window.location.pathname;
+    const search = window.location.search;
 
-  // 找出当前是否已经带语言前缀
-  const pathParts = pathname.split('/').filter(Boolean); // 去掉空的 ''
-  const supportedLangs = languages.map(l => l.lang);
+    // 找出当前是否已经带语言前缀
+    const pathParts = pathname.split('/').filter(Boolean); // 去掉空的 ''
+    const supportedLangs = languages.map(l => l.lang);
 
-  let newPath = '';
+    let newPath = '';
+    document.cookie = `preferred_language=${langFlag}; path=/; max-age=31536000`;
+    if (pathParts.length > 0 && supportedLangs.includes(pathParts[0])) {
+      // 当前路径已包含语言前缀，如 /en/about
+      pathParts[0] = langFlag; // 替换语言
+      newPath = '/' + pathParts.join('/');
+    } else {
+      // 当前路径不包含语言前缀，如 /
+      newPath = `/${langFlag}${pathname}`;
+    }
 
-  if (pathParts.length > 0 && supportedLangs.includes(pathParts[0])) {
-    // 当前路径已包含语言前缀，如 /en/about
-    pathParts[0] = langFlag; // 替换语言
-    newPath = '/' + pathParts.join('/');
-  } else {
-    // 当前路径不包含语言前缀，如 /
-    newPath = `/${langFlag}${pathname}`;
-  }
+    // 可选: 加一个刷新时间戳参数避免缓存
+    const searchParams = new URLSearchParams(search);
+    searchParams.set('lang_refresh', Date.now().toString());
 
-  // 可选: 加一个刷新时间戳参数避免缓存
-  const searchParams = new URLSearchParams(search);
-  searchParams.set('lang_refresh', Date.now().toString());
-
-  window.location.href = `${newPath}?${searchParams.toString()}`;
-};
+    window.location.href = `${newPath}?${searchParams.toString()}`;
+  };
 
 
   // 搜索框切换
