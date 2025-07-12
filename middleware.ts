@@ -55,10 +55,10 @@ export function middleware(request: NextRequest) {
   );
   
   // 修改这部分逻辑，确保根路径也能正确重定向
-  if (pathname === '/') {
-    const locale = getLocale(request);
-    return NextResponse.redirect(new URL(`/${locale}`, request.url));
-  }
+  // if (pathname === '/') {
+  //   const locale = getLocale(request);
+  //   return NextResponse.redirect(new URL(`/${locale}`, request.url));
+  // }
 
   // 原有逻辑保持不变
   if (pathnameLocale) return NextResponse.next();
