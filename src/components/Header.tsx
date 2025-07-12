@@ -15,12 +15,20 @@ import Navigation from '@/components/Navigation';
 import { BASE_TEXT } from '@/config/constants';
 import { Language } from '@/config/structure';
 import { useGlobalData } from '@/context/GlobalContext';
+import { stripLangPrefix, withLangPrefix } from '@/utils/pathUtils';
+import { usePathname, useRouter } from 'next/navigation';
 
 // 本地存储键名
 const LANGUAGE_STORAGE_KEY = 'preferred_language';
 
 const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
-  const [currentLang, setCurrentLang] = useState<string>('en');
+  const pathname = usePathname();
+  const [currentLang, setCurrentLang] = useState<string>(() => {
+    const pathLang = pathname.split('/')[1];
+    const supportedLangs = languages.map(l => l.lang);
+    if (supportedLangs.includes(pathLang)) return pathLang;
+    return supportedLangs[0]; 
+  });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const [isMobileLanguageOpen, setIsMobileLanguageOpen] = useState(false);
@@ -33,26 +41,16 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
   const baseInfo = textConfig || BASE_TEXT;
 
   // 添加这个useEffect来初始化组件和从本地存储加载语言设置
+  const router = useRouter();
   useEffect(() => {
-    // 从本地存储获取保存的语言
-    if (typeof window !== 'undefined') {
-      try {
-        const savedLang = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-        if (savedLang) {
-          // 检查保存的语言是否在当前支持的语言列表中
-          const isValidLang = languages.some(lang => lang.lang === savedLang);
-          if (isValidLang) {
-            setCurrentLang(savedLang);
-          }
-        }
-      } catch (error) {
-        console.error('无法从本地存储读取语言设置:', error);
-      }
+    const pathLang = pathname.split('/')[1];
+    const supportedLangs = languages.map(l => l.lang);
+    if (supportedLangs.includes(pathLang)) {
+      setCurrentLang(pathLang);
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, pathLang);
     }
-
-    // 组件挂载后，将loading设置为false
     setLoading(false);
-  }, [languages]);
+  }, [pathname, languages]);
 
   // DOM引用
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -66,7 +64,6 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
 
   // 获取当前语言对象
   const currentLanguage = languages.find(lang => lang.lang === currentLang) || languages[0];
-
 
   // 处理点击外部区域关闭菜单
   useEffect(() => {
@@ -194,28 +191,12 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
     setIsMobileLanguageOpen(false);
 
     const pathname = window.location.pathname;
-    const search = window.location.search;
-
-    // 找出当前是否已经带语言前缀
-    const pathParts = pathname.split('/').filter(Boolean); // 去掉空的 ''
-    const supportedLangs = languages.map(l => l.lang);
-
-    let newPath = '';
-    document.cookie = `preferred_language=${langFlag}; path=/; max-age=31536000`;
-    if (pathParts.length > 0 && supportedLangs.includes(pathParts[0])) {
-      // 当前路径已包含语言前缀，如 /en/about
-      pathParts[0] = langFlag; // 替换语言
-      newPath = '/' + pathParts.join('/');
-    } else {
-      // 当前路径不包含语言前缀，如 /
-      newPath = `/${langFlag}${pathname}`;
-    }
-
-    // 可选: 加一个刷新时间戳参数避免缓存
-    const searchParams = new URLSearchParams(search);
+    const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('lang_refresh', Date.now().toString());
 
-    window.location.href = `${newPath}?${searchParams.toString()}`;
+    const newPath = withLangPrefix(pathname, langFlag) + '?' + searchParams.toString();
+
+    router.push(newPath);
   };
 
 

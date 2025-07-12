@@ -18,9 +18,11 @@ interface NavigationProps {
 }
 
 const Navigation: React.FC<NavigationProps> = ({ items, mobile = false, onItemClick, className = '', lang = 'en' }) => {
-  const currentLang = safeLang(lang);
+  // const currentLang = safeLang(lang);//会导致重复跳转en
+  const currentLang = lang;
   const buildHref = (rawHref: string) => {
-    const cleaned = rawHref.replace(/^\/?(en|zh)(\/|$)/, '/');
+    const langPattern = getSupportedLocaleCodes().join('|');
+    const cleaned = rawHref.replace(new RegExp(`^\/?(${langPattern})(\/|$)`), '/');
     return `/${currentLang}${cleaned}`;
   };
 

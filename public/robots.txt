@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.xhget-tooth.com
+
+# Sitemaps
+Sitemap: https://www.xhget-tooth.com/sitemap.xml

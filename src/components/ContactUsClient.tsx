@@ -43,7 +43,6 @@ export default function ContactUsClient({ contactUsHint }: { contactUsHint: any 
   const fetchCaptcha = async () => {
     try {
       const captchaData = await captchaImageRequest();
-      console.log(captchaData)
       setCaptcha(captchaData);
     } catch (error) {
       console.error('获取验证码失败:', error);

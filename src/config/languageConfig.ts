@@ -4,6 +4,7 @@ import { LANGUAGES } from './constants';
 let supportedLanguages: Language[] = LANGUAGES;
 
 export function getSupportedLocaleCodes(): string[] {
+  
   return supportedLanguages.map(lang => lang.lang);
 }
 
