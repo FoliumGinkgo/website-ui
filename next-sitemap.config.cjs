@@ -1,4 +1,4 @@
-const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yourdomain.com';
+const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.xhget-tooth.com';
 
 const ISO_LANGUAGES = [
   'en', 'zh', 'fr', 'de', 'es', 'pt', 'ru', 'ja', 'ko', 'it',

@@ -53,10 +53,16 @@ export function middleware(request: NextRequest) {
   const pathnameLocale = locales.find(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
+  
+  // 修改这部分逻辑，确保根路径也能正确重定向
+  if (pathname === '/') {
+    const locale = getLocale(request);
+    return NextResponse.redirect(new URL(`/${locale}`, request.url));
+  }
 
-  // 如果路径中已经包含语言代码，不进行重定向
+  // 原有逻辑保持不变
   if (pathnameLocale) return NextResponse.next();
-
+  
   // 获取用户偏好的语言
   const locale = getLocale(request);
   

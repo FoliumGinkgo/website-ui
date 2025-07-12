@@ -49,11 +49,11 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
         console.error('无法从本地存储读取语言设置:', error);
       }
     }
-    
+
     // 组件挂载后，将loading设置为false
     setLoading(false);
   }, [languages]);
-  
+
   // DOM引用
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const languageDropdownRef = useRef<HTMLDivElement>(null);
@@ -114,66 +114,70 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
       // 关闭搜索框
       setIsSearchOpen(false);
       setIsMobileSearchOpen(false);
-      
+
       // 跳转到搜索结果页面
       window.location.href = `/${currentLang}/search?keyword=${encodeURIComponent(searchQuery.trim())}`;
     }
   };
-  
+
   // 修改桌面端搜索下拉框，添加搜索按钮
-  {isSearchOpen && (
-    <div ref={desktopSearchOverlayRef} className="hidden md:block fixed top-20 left-0 right-0 bg-white shadow-lg border-b border-gray-200 z-999">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <form onSubmit={handleSearch} className="flex items-center gap-3">
-          <div className="relative flex-1">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={baseInfo.baseInfo.searchPlaceholder}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-md focus:outline-none transition-all duration-300 text-lg"
-              autoFocus
-            />
-            <HiOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-          </div>
-          <button 
-            type="submit" 
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md transition-all duration-300 flex items-center gap-2"
-          >
-            <HiOutlineSearch className="w-5 h-5" />
-            <span>搜索</span>
-          </button>
-        </form>
+  {
+    isSearchOpen && (
+      <div ref={desktopSearchOverlayRef} className="hidden md:block fixed top-20 left-0 right-0 bg-white shadow-lg border-b border-gray-200 z-999">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <form onSubmit={handleSearch} className="flex items-center gap-3">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={baseInfo.baseInfo.searchPlaceholder}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-md focus:outline-none transition-all duration-300 text-lg"
+                autoFocus
+              />
+              <HiOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            </div>
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md transition-all duration-300 flex items-center gap-2"
+            >
+              <HiOutlineSearch className="w-5 h-5" />
+              <span>搜索</span>
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  )}
-  
+    )
+  }
+
   // 修改移动端搜索下拉框，添加搜索按钮
-  {isMobileSearchOpen && (
-    <div ref={mobileSearchOverlayRef} className="md:hidden fixed top-20 left-0 right-0 bg-white shadow-lg z-999">
-      <div className="p-4">
-        <form onSubmit={handleSearch} className="flex items-center gap-2">
-          <div className="relative flex-1">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={baseInfo.baseInfo.searchPlaceholder}
-              className="w-full pl-8 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none transition-all duration-300 text-base"
-              autoFocus
-            />
-            <HiOutlineSearch className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-          </div>
-          <button 
-            type="submit" 
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-md transition-all duration-300"
-          >
-            <HiOutlineSearch className="w-4 h-4" />
-          </button>
-        </form>
+  {
+    isMobileSearchOpen && (
+      <div ref={mobileSearchOverlayRef} className="md:hidden fixed top-20 left-0 right-0 bg-white shadow-lg z-999">
+        <div className="p-4">
+          <form onSubmit={handleSearch} className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={baseInfo.baseInfo.searchPlaceholder}
+                className="w-full pl-8 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none transition-all duration-300 text-base"
+                autoFocus
+              />
+              <HiOutlineSearch className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            </div>
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-md transition-all duration-300"
+            >
+              <HiOutlineSearch className="w-4 h-4" />
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  )}
+    )
+  }
 
   // 语言切换处理
   const handleLanguageChange = (langFlag: string) => {
@@ -185,25 +189,25 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
     } catch (error) {
       console.error('无法保存语言设置到本地存储:', error);
     }
-    
+
     setCurrentLang(langFlag);
     setIsLanguageDropdownOpen(false);
     setIsMobileLanguageOpen(false);
-    
+
     // 获取当前路径
     const pathname = window.location.pathname;
-    
+
     // 提取当前路径中的语言代码和路径部分
     const pathParts = pathname.split('/');
     if (pathParts.length > 1) {
       // 检查第一个路径段是否是语言代码
       const currentLangInPath = languages.some(lang => lang.lang === pathParts[1]);
-      
+
       if (currentLangInPath) {
         // 替换路径中的语言代码
         pathParts[1] = langFlag;
         const newPath = pathParts.join('/');
-        
+
         // 导航到新路径
         window.location.href = newPath + window.location.search;
       } else {
@@ -261,13 +265,13 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
             {/* Logo区域 */}
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center group outline-none">
-                <div className="h-16 w-16 relative transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
+                <div className="h-auto w-auto relative transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
                   <Image
                     src="/logo.png"
                     alt={baseInfo.baseInfo.companyName}
-                    fill
-                    sizes="64px"
-                    className="object-contain w-full h-auto"
+                    width={142}
+                    height={44}
+                    className="object-contain w-[113px] h-[35px] "
                     priority
                   />
                 </div>
@@ -310,7 +314,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                 >
                   {currentLanguage && (
                     <Image
-                      src={currentLanguage.id === -1? currentLanguage.logo :getImageUrl(currentLanguage.logo)}
+                      src={currentLanguage.id === -1 ? currentLanguage.logo : getImageUrl(currentLanguage.logo)}
                       alt={currentLanguage.name}
                       width={16}
                       height={16}
@@ -331,7 +335,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                         className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-100 transition-all duration-200 flex items-center space-x-3 group ${currentLang === language.lang ? 'bg-blue-50 text-blue-600' : 'text-gray-700'}`}
                       >
                         <Image
-                          src={currentLanguage.id === -1? currentLanguage.logo :getImageUrl(language.logo)}
+                          src={currentLanguage.id === -1 ? currentLanguage.logo : getImageUrl(language.logo)}
                           alt={language.name}
                           width={20}
                           height={20}
@@ -355,7 +359,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                 >
                   {currentLanguage && (
                     <Image
-                      src={currentLanguage.id === -1? currentLanguage.logo :getImageUrl(currentLanguage.logo)}
+                      src={currentLanguage.id === -1 ? currentLanguage.logo : getImageUrl(currentLanguage.logo)}
                       alt={currentLanguage.name}
                       width={24}
                       height={24}
@@ -376,7 +380,7 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                           }`}
                       >
                         <Image
-                          src={currentLanguage.id === -1? currentLanguage.logo :getImageUrl(language.logo)}
+                          src={currentLanguage.id === -1 ? currentLanguage.logo : getImageUrl(language.logo)}
                           alt={language.name}
                           width={20}
                           height={20}
@@ -431,8 +435,8 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                 />
                 <HiOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md transition-all duration-300 flex items-center gap-2"
               >
                 <HiOutlineSearch className="w-5 h-5" />
@@ -458,8 +462,8 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
                 />
                 <HiOutlineSearch className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               </div>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-md transition-all duration-300 flex items-center justify-center"
               >
                 <HiOutlineSearch className="w-4 h-4" />

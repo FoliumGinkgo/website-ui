@@ -28,16 +28,16 @@ const Footer: React.FC = () => {
           {/* 公司信息区域 */}
           <div className="lg:col-span-2">
             <div className="flex items-center mb-4 group">
-              <div className="h-10 w-10 relative transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
+              <div className="h-auto w-auto relative transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
                 <Image
                   src="/logo.png"
                   alt={baseInfo.baseInfo.companyName}
-                  fill
-                  sizes="40px"
-                  className="object-contain filter brightness-0 invert"
+                  width={142}
+                  height={44}
+                  className="object-contain w-[113px] h-[35px] "
                 />
               </div>
-              <span className="ml-3 text-2xl font-bold transition-colors duration-300 group-hover:text-blue-400">
+              <span className="ml-3 font-bold transition-colors duration-300 group-hover:text-blue-400">
                 {baseInfo.baseInfo.companyName}
               </span>
             </div>
@@ -55,7 +55,7 @@ const Footer: React.FC = () => {
                       className={`text-gray-400 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1`}
                       aria-label={contact.name}
                       style={{ animationDelay: `${index * 100}ms` }}>
-                      <FaWhatsapp className='text-2xl'/>
+                      <FaWhatsapp className='text-2xl' />
                     </a>
                   )
                 }
@@ -68,7 +68,7 @@ const Footer: React.FC = () => {
                       className={`text-gray-400 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1`}
                       aria-label={contact.name}
                       style={{ animationDelay: `${index * 100}ms` }}>
-                      <FaFacebook className='text-2xl'/>
+                      <FaFacebook className='text-2xl' />
                     </a>
                   );
                 }
@@ -81,7 +81,7 @@ const Footer: React.FC = () => {
                       className={`text-gray-400 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1`}
                       aria-label={contact.name}
                       style={{ animationDelay: `${index * 100}ms` }}>
-                      <FaInstagram className='text-2xl'/>
+                      <FaInstagram className='text-2xl' />
                     </a>
                   );
                 }

@@ -30,14 +30,14 @@ export const BASE_TEXT: TextConfig = {
     productsList: 'Products List',
     contactUs: 'Contact Us',
     searchPlaceholder: 'Search products...',
-    companyName: 'Xinhang Company',
+    companyName: 'Jiangxi Xinhang Precision Casting Co., Ltd',
     language: 'Language',
     contact: 'Contact',
     //底部Footer
     quickLinks: 'Quick Links',
-    companyDesc: "Professional excavator parts manufacturer, committed to providing high-quality products and services to global customers.",
-    address: 'Zhangjiang Hi-Tech Park, Pudong New Area, Shanghai, China',
-    copyrightInfo: '© Copyright 2023 Xinhang Company. All Rights Reserved.',
+    companyDesc: "",
+    address: 'ADD ：Xinjie Town,Gao’an County,Jiangxi Province Structural Ceramics Industrial Base,  ',
+    copyrightInfo: 'Copyright © Jiangxi Xinhang Precision Casting Co., Ltd All Rights Reserved.',
     productsCategory: "Products Category",
     readMore: "Read More",
     relatedProducts: "Related Products"

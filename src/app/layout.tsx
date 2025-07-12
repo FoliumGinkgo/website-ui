@@ -5,8 +5,8 @@ import type { Metadata } from "next";
 import { headers } from 'next/headers';
 
 export const metadata: Metadata = {
-  title: "鑫航公司",
-  description: "鑫航公司是专业的工程机械配件制造商",
+  title: "江西鑫航精密铸造有限公司",
+  description: "江西鑫航精密铸造有限公司是江西著名的工程机械零部件及零部件专业制造商，公司产品远销欧美、东南亚等国家和地区，是中国工程机械零部件行业的重要供应商。",
 };
 
 // 在 RootLayout 函数中

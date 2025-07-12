@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: { lang: string, slu
   }
   
   // 获取当前URL的基础部分（不包含语言代码）
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.xhget-tooth.com';
   
   // 生成alternates对象，包含所有支持语言的hreflang标记
   const alternates: Record<string, string> = {};
