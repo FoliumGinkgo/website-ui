@@ -181,50 +181,43 @@ const Header: React.FC<{ languages: Language[] }> = ({ languages }) => {
 
   // 语言切换处理
   const handleLanguageChange = (langFlag: string) => {
-    // 保存语言选择到本地存储
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(LANGUAGE_STORAGE_KEY, langFlag);
-      }
-    } catch (error) {
-      console.error('无法保存语言设置到本地存储:', error);
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, langFlag);
     }
+  } catch (error) {
+    console.error('无法保存语言设置到本地存储:', error);
+  }
 
-    setCurrentLang(langFlag);
-    setIsLanguageDropdownOpen(false);
-    setIsMobileLanguageOpen(false);
+  setCurrentLang(langFlag);
+  setIsLanguageDropdownOpen(false);
+  setIsMobileLanguageOpen(false);
 
-    // 获取当前路径
-    const pathname = window.location.pathname;
+  const pathname = window.location.pathname;
+  const search = window.location.search;
 
-    // 提取当前路径中的语言代码和路径部分
-    const pathParts = pathname.split('/');
-    if (pathParts.length > 1) {
-      // 检查第一个路径段是否是语言代码
-      const currentLangInPath = languages.some(lang => lang.lang === pathParts[1]);
+  // 找出当前是否已经带语言前缀
+  const pathParts = pathname.split('/').filter(Boolean); // 去掉空的 ''
+  const supportedLangs = languages.map(l => l.lang);
 
-      if (currentLangInPath) {
-        // 替换路径中的语言代码
-        pathParts[1] = langFlag;
-        const newPath = pathParts.join('/');
+  let newPath = '';
 
-        // 导航到新路径
-        window.location.href = newPath + window.location.search;
-      } else {
-        // 如果当前路径中没有语言代码，添加新的语言代码
-        // 修复：确保路径格式正确
-        const cleanPath = pathname.startsWith('/') ? pathname : `/${pathname}`;
-        const searchParams = new URLSearchParams(window.location.search);
-        searchParams.set('lang_refresh', Date.now().toString());
-        window.location.href = `/${langFlag}${cleanPath === '/' ? '' : cleanPath}` + '?' + searchParams.toString();
-      }
-    } else {
-      // 处理极端情况：路径为空或只有根路径
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.set('lang_refresh', Date.now().toString());
-      window.location.href = `/${langFlag}` + '?' + searchParams.toString();
-    }
-  };
+  if (pathParts.length > 0 && supportedLangs.includes(pathParts[0])) {
+    // 当前路径已包含语言前缀，如 /en/about
+    pathParts[0] = langFlag; // 替换语言
+    newPath = '/' + pathParts.join('/');
+  } else {
+    // 当前路径不包含语言前缀，如 /
+    newPath = `/${langFlag}${pathname}`;
+  }
+
+  // 可选: 加一个刷新时间戳参数避免缓存
+  const searchParams = new URLSearchParams(search);
+  searchParams.set('lang_refresh', Date.now().toString());
+
+  window.location.href = `${newPath}?${searchParams.toString()}`;
+};
+
 
   // 搜索框切换
   const toggleSearch = () => {
