@@ -126,7 +126,18 @@ export default function BucketTeethClient({
     if (selectedCategory === categoryId && !selectedSeries) {
       setSelectedCategory(null);
       setShowTitle(textConfig.baseInfo.productsList); // 重置标题为产品列表
-      //fetchProducts(categoryId, 1);
+      if (hasCategory(categoryId)) {
+        setTotalItems(categoriesCache[categoryId].total || 0);
+        setProductList(categoriesCache[categoryId].rows);
+      } else {
+        fetchProducts(categoryId, 1);
+        categoriesCache[categoryId] = {
+          code: 200,
+          msg: 'success',
+          rows: productList || [],
+          total: 0
+        };
+      }
       // 更新URL，移除categoryId参数
       router.push(`/${lang}/bucket-teeth`);
     } else {
