@@ -7,6 +7,8 @@ import Footer from '@/components/Footer';
 import { LANGUAGES } from "@/config/constants";
 import { setSupportedLanguages, getSupportedLanguages } from "@/config/languageConfig";
 import { GlobalDataProvider } from "@/context/GlobalContext";
+import { ProductData } from "@/config/structure";
+import Contact from "@/components/Contact";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -110,6 +112,7 @@ export default async function RootLayout({
     contactUs,
     languages, // 添加语言数据到全局数据中
     aboutUs, // 添加关于我们数据到全局数据中
+    categoriesCache: {} as Record<number, ProductData>,
   };
 
   // 获取当前URL的基础部分（不包含语言代码）
@@ -120,6 +123,7 @@ export default async function RootLayout({
       {/* 使用GlobalDataProvider包装children，共享全局数据 */}
       <GlobalDataProvider value={globalData}>
         <Header languages={languages} />
+        <Contact/>
         <main className="flex-1">
           {children}
         </main>

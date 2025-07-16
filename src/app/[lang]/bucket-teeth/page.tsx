@@ -10,25 +10,8 @@ export default async function BucketTeeth({ params }: { params: { lang: string }
   const { lang } = params; // 移除 await
 
   // 服务器端数据获取
-  let categorys: Category[] = [];
-  let products: ProductData = {
-    code: 0,
-    msg: '',
-    rows: [],
-    total: 0
-  };
-  try {
-    const data = await categoryRequest(lang);
-    categorys = data;
-  } catch (error) {
-    console.error('Failed to fetch category data:', error);
-  }
-  try {
-    const data = await productsRequest(lang);
-    products = data;
-  } catch (error) {
-    console.error('Failed to fetch products data:', error);
-  }
+  let categorys: Category[] = await categoryRequest(lang);
+  let products: ProductData = await productsRequest(lang);
   return (
     <>
       <BucketTeethClient categorys={categorys} lang={lang} products={products} />

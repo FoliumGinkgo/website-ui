@@ -154,3 +154,6 @@ main {
     background-position: 200% 0;
   }
 }
+.fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}

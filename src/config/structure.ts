@@ -50,6 +50,10 @@ export interface TextConfig {
   contactUs: ContactUs[];
 }
 
+export interface CategoryCache {
+  [categoryId: number] : ProductData;
+}
+
 // 定义全局数据类型，根据实际需求调整
 export interface GlobalData {
   [key: string]: any;
@@ -58,6 +62,7 @@ export interface GlobalData {
   contactUs: ContactUs[];
   languages: Language[];
   aboutUs: AboutUs;
+  categoriesCache: CategoryCache;
 }
 //联系我们
 export interface ContactUs {
